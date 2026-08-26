@@ -31,6 +31,7 @@ public partial class MainWindow : Window
     private TextPointer? assistantSelectionEnd;
     private AssistantAction pendingAssistantAction;
     private bool closingAfterSave;
+    private bool sidebarUserCollapsed;
     private readonly SemaphoreSlim saveLock = new(1, 1);
 
     public MainWindow(
@@ -71,7 +72,10 @@ public partial class MainWindow : Window
         LoadCurrentDocument();
     }
 
-    private async void NewDocumentButton_Click(object sender, RoutedEventArgs e)
+    private async void NewDocumentButton_Click(object sender, RoutedEventArgs e) =>
+        await CreateDocumentAsync();
+
+    private async Task CreateDocumentAsync()
     {
         await AutosaveAsync(true);
         await viewModel.CreateAsync();
@@ -106,6 +110,69 @@ public partial class MainWindow : Window
     {
         DocumentMenu.PlacementTarget = DocumentMenuButton;
         DocumentMenu.IsOpen = true;
+    }
+
+    private void SidebarToggleButton_Click(object sender, RoutedEventArgs e)
+    {
+        sidebarUserCollapsed = DocumentSidebar.Visibility == Visibility.Visible;
+        SetSidebarVisible(!sidebarUserCollapsed);
+    }
+
+    private void MainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
+    {
+        LocalBadge.Visibility = ActualWidth < 1060 ? Visibility.Collapsed : Visibility.Visible;
+        if (ActualWidth < 1080)
+        {
+            SetSidebarVisible(false);
+        }
+        else if (!sidebarUserCollapsed)
+        {
+            SetSidebarVisible(true);
+        }
+    }
+
+    private async void MainWindow_PreviewKeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Escape && AssistantPanel.Visibility == Visibility.Visible)
+        {
+            CloseAssistantPanelButton_Click(this, new RoutedEventArgs());
+            e.Handled = true;
+            return;
+        }
+
+        if ((Keyboard.Modifiers & ModifierKeys.Control) == 0)
+        {
+            return;
+        }
+
+        if (e.Key == Key.N)
+        {
+            e.Handled = true;
+            await CreateDocumentAsync();
+        }
+        else if (e.Key == Key.D)
+        {
+            e.Handled = true;
+            DictateButton_Click(this, new RoutedEventArgs());
+        }
+        else if (e.Key == Key.A && (Keyboard.Modifiers & ModifierKeys.Shift) != 0)
+        {
+            e.Handled = true;
+            OpenAssistantButton_Click(this, new RoutedEventArgs());
+        }
+        else if (e.Key == Key.H && (Keyboard.Modifiers & ModifierKeys.Shift) != 0)
+        {
+            e.Handled = true;
+            VersionsButton_Click(this, new RoutedEventArgs());
+        }
+    }
+
+    private void SetSidebarVisible(bool visible)
+    {
+        DocumentSidebar.Visibility = visible ? Visibility.Visible : Visibility.Collapsed;
+        DocumentColumn.Width = visible ? new GridLength(250) : new GridLength(0);
+        DocumentGapColumn.Width = visible ? new GridLength(10) : new GridLength(0);
+        SidebarToggleButton.ToolTip = visible ? "Dölj dokumentlistan" : "Visa dokumentlistan";
     }
 
     private async void DeleteDocumentButton_Click(object sender, RoutedEventArgs e)

@@ -15,7 +15,8 @@
             <TextBlock Text="Starta inspelningen och tala i din vanliga takt."
                       Margin="0,6,0,10" Foreground="#667085"/>
             <Button x:Name="DeviceToggleButton" Content="Byt mikrofon" HorizontalAlignment="Left"
-                    Padding="8,4" MinHeight="28" Click="DeviceToggleButton_Click"/>
+                    Padding="8,4" MinHeight="40" AutomationProperties.Name="Byt mikrofon"
+                    Click="DeviceToggleButton_Click"/>
             <ComboBox x:Name="DeviceBox" DisplayMemberPath="Name" Height="38" Visibility="Collapsed"
                       Margin="0,6,0,0" AutomationProperties.Name="Mikrofon"/>
         </StackPanel>
@@ -35,10 +36,13 @@
         </Border>
         <WrapPanel Grid.Row="3" HorizontalAlignment="Center" Margin="0,18,0,0">
             <Button x:Name="StartButton" Content="Starta inspelning" MinWidth="190"
-                    Style="{StaticResource PrimaryButton}"
+                    Style="{StaticResource PrimaryButton}" IsDefault="True"
+                    AutomationProperties.Name="Starta eller slutför inspelning"
                     Click="StartButton_Click"/>
-            <Button x:Name="PauseButton" Content="Pausa" Visibility="Collapsed" Click="PauseButton_Click"/>
-            <Button Content="Avbryt" Click="CancelButton_Click"/>
+            <Button x:Name="PauseButton" Content="Pausa" Visibility="Collapsed"
+                    AutomationProperties.Name="Pausa eller fortsätt inspelning"
+                    Click="PauseButton_Click"/>
+            <Button Content="Avbryt" IsCancel="True" Click="CancelButton_Click"/>
         </WrapPanel>
     </Grid>
 </Window>

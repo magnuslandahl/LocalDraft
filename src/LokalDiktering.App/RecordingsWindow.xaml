@@ -14,7 +14,8 @@
         <TextBlock Text="Inspelningar" FontSize="22" FontWeight="SemiBold" Margin="0,0,0,12"/>
         <DataGrid x:Name="RecordingGrid" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True"
                   SelectionMode="Single" Background="White"
-                  BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
+                  BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                  AutomationProperties.Name="Sparade inspelningar">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Datum" Binding="{Binding CreatedLocal, StringFormat={}{0:g}}" Width="2*"/>
                 <DataGridTextColumn Header="Längd" Binding="{Binding Duration}" Width="*"/>

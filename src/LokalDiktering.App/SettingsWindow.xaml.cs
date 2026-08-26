@@ -35,6 +35,8 @@ public partial class SettingsWindow : Window
             HeadingText.Text = "Välkommen till Lokal Diktering";
             IntroText.Text = "Allt sker lokalt på datorn. Börja med att välja och testa den mikrofon du vill diktera med.";
             CancelButton.Content = "Avsluta";
+            StorageSection.Visibility = Visibility.Collapsed;
+            Height = 500;
         }
         Loaded += SettingsWindow_Loaded;
         Closing += SettingsWindow_Closing;
@@ -120,6 +122,13 @@ public partial class SettingsWindow : Window
         MessageBox.Show(
             "Lokal Diktering\n\nSvensk diktering och textredigering som körs helt lokalt.\n\nModeller: Whisper small q5_1 och Qwen3 1.7B Q4_K_M.\nLicenser finns i appmappen.",
             "Om Lokal Diktering",
+            MessageBoxButton.OK,
+            MessageBoxImage.Information);
+
+    private void PrivacyDetailsButton_Click(object sender, RoutedEventArgs e) =>
+        MessageBox.Show(
+            "Dokument, inspelningar, tillfälliga filer, modeller och AI-bearbetning stannar i appmappen. Appen använder ingen molntjänst eller telemetri.\n\nText lämnar appen endast när du själv kopierar eller klistrar in. Windows urklippshistorik och synkronisering kan då behålla texten. Undvik också att placera appmappen i OneDrive, Dropbox, Google Drive eller en nätverksmapp.",
+            "Så skyddas dina uppgifter",
             MessageBoxButton.OK,
             MessageBoxImage.Information);
 

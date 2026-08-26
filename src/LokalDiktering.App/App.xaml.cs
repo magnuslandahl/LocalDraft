@@ -88,6 +88,7 @@ public partial class App : Application
 
         MainWindow = services.GetRequiredService<MainWindow>();
         MainWindow.Show();
+        ShutdownMode = ShutdownMode.OnMainWindowClose;
         _ = ValidateModelsAsync(services.GetRequiredService<IModelManifestValidator>());
     }
 

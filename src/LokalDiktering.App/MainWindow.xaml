@@ -6,19 +6,25 @@
         xmlns:local="clr-namespace:LokalDiktering.App"
         mc:Ignorable="d"
         Title="Lokal Diktering" Height="820" Width="1280" MinHeight="650" MinWidth="960"
-        Background="{StaticResource CanvasBrush}" WindowStartupLocation="CenterScreen">
+        Background="{StaticResource CanvasBrush}" WindowStartupLocation="CenterScreen"
+        PreviewKeyDown="MainWindow_PreviewKeyDown" SizeChanged="MainWindow_SizeChanged">
     <DockPanel>
         <Border DockPanel.Dock="Top" Background="White" BorderBrush="{StaticResource BorderBrush}"
                 BorderThickness="0,0,0,1" Padding="20,13">
             <Grid>
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="Lokal Diktering" FontSize="21" FontWeight="SemiBold"
+                <Button x:Name="SidebarToggleButton" Grid.Column="0" Content="&#xE700;"
+                        Style="{StaticResource IconButton}" Margin="0,0,10,0"
+                        ToolTip="Dölj dokumentlistan" AutomationProperties.Name="Visa eller dölj dokumentlistan"
+                        Click="SidebarToggleButton_Click"/>
+                <TextBlock Grid.Column="1" Text="Lokal Diktering" FontSize="21" FontWeight="SemiBold"
                            Foreground="{StaticResource TextBrush}" VerticalAlignment="Center"/>
-                <Border Grid.Column="1" Background="{StaticResource SuccessSurfaceBrush}"
+                <Border x:Name="LocalBadge" Grid.Column="2" Background="{StaticResource SuccessSurfaceBrush}"
                         CornerRadius="16" Padding="12,6">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="●" Foreground="{StaticResource SuccessBrush}"
@@ -27,7 +33,7 @@
                                    FontWeight="SemiBold"/>
                     </StackPanel>
                 </Border>
-                <Button Grid.Column="2" Content="&#xE713;" Style="{StaticResource IconButton}"
+                <Button Grid.Column="3" Content="&#xE713;" Style="{StaticResource IconButton}"
                         Margin="12,0,0,0" ToolTip="Inställningar"
                         AutomationProperties.Name="Inställningar" Click="SettingsButton_Click"/>
             </Grid>
@@ -36,7 +42,9 @@
         <Border DockPanel.Dock="Bottom" Background="White" BorderBrush="{StaticResource BorderBrush}"
                 BorderThickness="0,1,0,0" Padding="16,8">
             <Grid>
-                <TextBlock Text="{Binding Status}" VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding Status}" VerticalAlignment="Center"
+                           AutomationProperties.Name="Sparstatus"
+                           AutomationProperties.LiveSetting="Polite"/>
                 <Button x:Name="CancelOperationButton" Content="Avbryt" HorizontalAlignment="Right"
                         Visibility="Collapsed" Click="CancelOperationButton_Click"/>
             </Grid>
@@ -44,8 +52,8 @@
 
         <Grid Margin="12">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="250"/>
-                <ColumnDefinition Width="10"/>
+                <ColumnDefinition x:Name="DocumentColumn" Width="250"/>
+                <ColumnDefinition x:Name="DocumentGapColumn" Width="10"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
@@ -170,8 +178,13 @@
                             </Border>
                         </Grid>
                         <Grid Grid.Row="3" Margin="0,12,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
                             <StackPanel Orientation="Horizontal">
                                 <Button FontSize="16" Padding="22,10" Style="{StaticResource PrimaryButton}"
+                                        ToolTip="Diktera (Ctrl+D)"
                                         Click="DictateButton_Click" AutomationProperties.Name="Diktera">
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Text="&#xE720;" FontFamily="Segoe MDL2 Assets"
@@ -180,6 +193,7 @@
                                     </StackPanel>
                                 </Button>
                                 <Button Click="OpenAssistantButton_Click"
+                                        ToolTip="Textassistent (Ctrl+Shift+A)"
                                         AutomationProperties.Name="Öppna textassistent">
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Text="✦" FontFamily="Segoe UI Symbol"
@@ -189,7 +203,7 @@
                                     </StackPanel>
                                 </Button>
                             </StackPanel>
-                            <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center"
+                            <StackPanel Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center"
                                         Orientation="Horizontal">
                                 <TextBlock Text="✓" Foreground="{StaticResource SuccessBrush}"
                                            Margin="0,0,5,0"/>
@@ -216,7 +230,7 @@
                                         Click="CloseAssistantPanelButton_Click"/>
                             </Grid>
                             <TextBlock x:Name="AssistantScope" Text="Hela dokumentet" Foreground="#667085"
-                                       Margin="0,4,0,12"/>
+                                       Margin="0,4,0,12" AutomationProperties.Name="Text som bearbetas"/>
                             <StackPanel x:Name="AssistantComposerPanel">
                                 <StackPanel x:Name="AssistantHistorySection" Visibility="Collapsed">
                                     <TextBlock Text="Senaste förslag" FontWeight="SemiBold" Margin="0,0,0,5"/>
@@ -249,6 +263,7 @@
                                 </Expander>
                                 <TextBlock Text="Egen instruktion" FontWeight="SemiBold" Margin="3,14,3,5"/>
                                 <TextBox x:Name="CustomInstruction" AcceptsReturn="True" Height="90" TextWrapping="Wrap"
+                                         AutomationProperties.Name="Egen instruktion till textassistenten"
                                          ToolTip="Skriv vad du vill ändra, till exempel: Gör texten tydligare och dela upp den i rubriker."/>
                                 <Button Content="Kör instruktionen" Tag="Custom" Style="{StaticResource PrimaryButton}"
                                         Click="AssistantActionButton_Click"/>
