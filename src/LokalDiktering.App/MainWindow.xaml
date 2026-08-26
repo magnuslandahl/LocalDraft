@@ -39,17 +39,6 @@
             </Grid>
         </Border>
 
-        <Border DockPanel.Dock="Bottom" Background="White" BorderBrush="{StaticResource BorderBrush}"
-                BorderThickness="0,1,0,0" Padding="16,8">
-            <Grid>
-                <TextBlock Text="{Binding Status}" VerticalAlignment="Center"
-                           AutomationProperties.Name="Sparstatus"
-                           AutomationProperties.LiveSetting="Polite"/>
-                <Button x:Name="CancelOperationButton" Content="Avbryt" HorizontalAlignment="Right"
-                        Visibility="Collapsed" Click="CancelOperationButton_Click"/>
-            </Grid>
-        </Border>
-
         <Grid Margin="12">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition x:Name="DocumentColumn" Width="250"/>
@@ -205,10 +194,11 @@
                             </StackPanel>
                             <StackPanel Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center"
                                         Orientation="Horizontal">
-                                <TextBlock Text="✓" Foreground="{StaticResource SuccessBrush}"
-                                           Margin="0,0,5,0"/>
-                                <TextBlock Foreground="{StaticResource SecondaryTextBrush}"
-                                           Text="Sparas automatiskt"/>
+                                <TextBlock Text="{Binding Status}" Foreground="{StaticResource SecondaryTextBrush}"
+                                           VerticalAlignment="Center" AutomationProperties.Name="Sparstatus"
+                                           AutomationProperties.LiveSetting="Polite"/>
+                                <Button x:Name="CancelOperationButton" Content="Avbryt" Visibility="Collapsed"
+                                        Margin="10,0,0,0" Click="CancelOperationButton_Click"/>
                             </StackPanel>
                         </Grid>
                     </Grid>
