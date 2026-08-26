@@ -14,6 +14,11 @@ public partial class VersionsWindow : Window
 
     public VersionMetadata? SelectedVersion { get; private set; }
 
+    private void VersionList_SelectionChanged(
+        object sender,
+        System.Windows.Controls.SelectionChangedEventArgs e) =>
+        RestoreButton.IsEnabled = VersionList.SelectedItem is VersionMetadata;
+
     private void RestoreButton_Click(object sender, RoutedEventArgs e)
     {
         SelectedVersion = VersionList.SelectedItem as VersionMetadata;

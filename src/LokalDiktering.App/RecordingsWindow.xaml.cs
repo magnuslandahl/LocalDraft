@@ -29,6 +29,7 @@ public partial class RecordingsWindow : Window
         ReplaceButton.Tag = hasSelection;
         Loaded += async (_, _) => await RefreshAsync();
         Closed += async (_, _) => await playback.DisposeAsync();
+        RecordingGrid.SelectionChanged += RecordingGrid_SelectionChanged;
     }
 
     public string? TranscriptToInsert { get; private set; }
@@ -36,8 +37,16 @@ public partial class RecordingsWindow : Window
 
     private async Task RefreshAsync()
     {
-        RecordingGrid.ItemsSource = await recordings.ListAsync(documentId);
+        var items = await recordings.ListAsync(documentId);
+        RecordingGrid.ItemsSource = items;
+        EmptyStateText.Visibility = items.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
+        RecordingActionsPanel.Visibility = Visibility.Collapsed;
     }
+
+    private void RecordingGrid_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e) =>
+        RecordingActionsPanel.Visibility = RecordingGrid.SelectedItem is null
+            ? Visibility.Collapsed
+            : Visibility.Visible;
 
     private async void PlayButton_Click(object sender, RoutedEventArgs e)
     {

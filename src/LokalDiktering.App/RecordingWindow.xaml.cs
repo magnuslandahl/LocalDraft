@@ -51,6 +51,8 @@ public partial class RecordingWindow : Window
             if (DeviceBox.Items.Count == 0)
             {
                 StateText.Text = "Ingen mikrofon hittades";
+                DeviceBox.Visibility = Visibility.Visible;
+                DeviceToggleButton.Visibility = Visibility.Collapsed;
             }
         }
         catch (Exception)
@@ -61,6 +63,12 @@ public partial class RecordingWindow : Window
 
     private async void StartButton_Click(object sender, RoutedEventArgs e)
     {
+        if (recorder.IsRecording)
+        {
+            await FinishRecordingAsync();
+            return;
+        }
+
         if (DeviceBox.SelectedItem is not AudioDevice device)
         {
             return;
@@ -77,16 +85,26 @@ public partial class RecordingWindow : Window
             await recorder.StartAsync(device.Id, partialPath);
             RecordingDot.Fill = Brushes.Red;
             StateText.Text = "Spelar in…";
-            StartButton.IsEnabled = false;
+            StartButton.Content = "Klar – transkribera";
             DeviceBox.IsEnabled = false;
-            PauseButton.IsEnabled = true;
-            DoneButton.IsEnabled = true;
+            DeviceToggleButton.IsEnabled = false;
+            PauseButton.Visibility = Visibility.Visible;
         }
         catch (Exception)
         {
             StateText.Text = "Mikrofonen kunde inte startas. Kontrollera behörighet och försök igen.";
             StartButton.Content = "Försök igen";
         }
+    }
+
+    private void DeviceToggleButton_Click(object sender, RoutedEventArgs e)
+    {
+        DeviceBox.Visibility = DeviceBox.Visibility == Visibility.Visible
+            ? Visibility.Collapsed
+            : Visibility.Visible;
+        DeviceToggleButton.Content = DeviceBox.Visibility == Visibility.Visible
+            ? "Dölj mikrofonval"
+            : "Byt mikrofon";
     }
 
     private void PauseButton_Click(object sender, RoutedEventArgs e)
@@ -108,7 +126,7 @@ public partial class RecordingWindow : Window
         }
     }
 
-    private async void DoneButton_Click(object sender, RoutedEventArgs e)
+    private async Task FinishRecordingAsync()
     {
         if (partialPath is null)
         {
@@ -158,7 +176,7 @@ public partial class RecordingWindow : Window
 
     private void SetControlsEnabled(bool value)
     {
+        StartButton.IsEnabled = value;
         PauseButton.IsEnabled = value;
-        DoneButton.IsEnabled = value;
     }
 }

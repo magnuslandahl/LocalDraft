@@ -149,6 +149,8 @@ public partial class MainWindow : Window
             RichTextContent.Load(Editor, current.Content.Rtf);
             Editor.IsReadOnly = false;
             PreviewPanel.Visibility = Visibility.Collapsed;
+            AssistantComposerPanel.Visibility = Visibility.Visible;
+            SelectionAssistantBar.Visibility = Visibility.Collapsed;
             _ = RefreshAssistantHistoryAsync();
         }
         finally
@@ -243,10 +245,15 @@ public partial class MainWindow : Window
     private void Editor_SelectionChanged(object sender, RoutedEventArgs e)
     {
         AssistantScope.Text = Editor.Selection.IsEmpty ? "Hela dokumentet" : "Markerad text";
+        SelectionAssistantBar.Visibility =
+            !Editor.Selection.IsEmpty && AssistantPanel.Visibility != Visibility.Visible
+                ? Visibility.Visible
+                : Visibility.Collapsed;
     }
 
     private void OpenAssistantButton_Click(object sender, RoutedEventArgs e)
     {
+        SelectionAssistantBar.Visibility = Visibility.Collapsed;
         AssistantPanel.Visibility = Visibility.Visible;
         CustomInstruction.Focus();
     }
@@ -255,6 +262,9 @@ public partial class MainWindow : Window
     {
         CloseAssistantPreview();
         AssistantPanel.Visibility = Visibility.Collapsed;
+        SelectionAssistantBar.Visibility = Editor.Selection.IsEmpty
+            ? Visibility.Collapsed
+            : Visibility.Visible;
         Editor.Focus();
     }
 
@@ -357,6 +367,8 @@ public partial class MainWindow : Window
         assistantSelectionStart = selected ? Editor.Selection.Start : null;
         assistantSelectionEnd = selected ? Editor.Selection.End : null;
         pendingAssistantAction = action;
+        AssistantPanel.Visibility = Visibility.Visible;
+        SelectionAssistantBar.Visibility = Visibility.Collapsed;
         await RunBusyAsync("Bearbetar text lokalt…", async token =>
         {
             var result = await assistant.ProcessAsync(
@@ -373,7 +385,8 @@ public partial class MainWindow : Window
             }
 
             AssistantPreviewBox.Text = result.Text;
-            ApplyAssistantButton.Content = selected ? "Ersätt markerad text" : "Ersätt hela dokumentet";
+            ApplyAssistantButton.Content = selected ? "Använd på markerad text" : "Använd i hela dokumentet";
+            AssistantComposerPanel.Visibility = Visibility.Collapsed;
             PreviewPanel.Visibility = Visibility.Visible;
             await assistantHistory.AddAsync(
                 viewModel.Current!.Metadata.Id,
@@ -440,9 +453,13 @@ public partial class MainWindow : Window
             return;
         }
 
-        AssistantHistoryList.ItemsSource = (await assistantHistory.ListAsync(viewModel.Current.Metadata.Id))
+        var entries = (await assistantHistory.ListAsync(viewModel.Current.Metadata.Id))
             .OrderByDescending(x => x.CreatedUtc)
             .ToArray();
+        AssistantHistoryList.ItemsSource = entries;
+        AssistantHistorySection.Visibility = entries.Length == 0
+            ? Visibility.Collapsed
+            : Visibility.Visible;
     }
 
     private async Task ApplyAssistantResultAsync()
@@ -611,6 +628,7 @@ public partial class MainWindow : Window
     private void CloseAssistantPreview()
     {
         PreviewPanel.Visibility = Visibility.Collapsed;
+        AssistantComposerPanel.Visibility = Visibility.Visible;
         Editor.IsReadOnly = false;
         assistantSelectionStart = null;
         assistantSelectionEnd = null;
