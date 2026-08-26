@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.Windows.Threading;
 using System.Windows;
+using System.Windows.Markup;
 using LokalDiktering.Core;
 using LokalDiktering.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,6 +19,9 @@ public partial class App : Application
         var swedish = CultureInfo.GetCultureInfo("sv-SE");
         CultureInfo.DefaultThreadCurrentCulture = swedish;
         CultureInfo.DefaultThreadCurrentUICulture = swedish;
+        FrameworkElement.LanguageProperty.OverrideMetadata(
+            typeof(FrameworkElement),
+            new FrameworkPropertyMetadata(XmlLanguage.GetLanguage(swedish.IetfLanguageTag)));
     }
 
     protected override async void OnStartup(StartupEventArgs e)

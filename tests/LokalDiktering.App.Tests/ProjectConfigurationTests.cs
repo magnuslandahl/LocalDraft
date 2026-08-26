@@ -110,6 +110,17 @@ public sealed class ProjectConfigurationTests
         Assert.True(shutdownModeIndex > showIndex);
     }
 
+    [Fact]
+    public void WpfBindings_UseSwedishFormatting()
+    {
+        var root = FindRepositoryRoot();
+        var startup = File.ReadAllText(Path.Combine(root, "src", "LokalDiktering.App", "App.xaml.cs"));
+
+        Assert.Contains("CultureInfo.GetCultureInfo(\"sv-SE\")", startup);
+        Assert.Contains("FrameworkElement.LanguageProperty.OverrideMetadata", startup);
+        Assert.Contains("XmlLanguage.GetLanguage(swedish.IetfLanguageTag)", startup);
+    }
+
     private static string FindRepositoryRoot()
     {
         var directory = new DirectoryInfo(AppContext.BaseDirectory);
