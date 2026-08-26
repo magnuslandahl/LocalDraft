@@ -1,7 +1,8 @@
 <Window x:Class="LokalDiktering.App.RecordingsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Inspelningar" Height="610" Width="820" WindowStartupLocation="CenterOwner">
+        Title="Inspelningar" Height="610" Width="820" WindowStartupLocation="CenterOwner"
+        Background="{StaticResource CanvasBrush}">
     <Grid Margin="18">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -12,7 +13,8 @@
         </Grid.RowDefinitions>
         <TextBlock Text="Inspelningar" FontSize="22" FontWeight="SemiBold" Margin="0,0,0,12"/>
         <DataGrid x:Name="RecordingGrid" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True"
-                  SelectionMode="Single">
+                  SelectionMode="Single" Background="White"
+                  BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Datum" Binding="{Binding CreatedLocal, StringFormat={}{0:g}}" Width="2*"/>
                 <DataGridTextColumn Header="Längd" Binding="{Binding Duration}" Width="*"/>

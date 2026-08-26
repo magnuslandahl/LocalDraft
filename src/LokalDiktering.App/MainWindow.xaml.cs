@@ -91,8 +91,16 @@ public partial class MainWindow : Window
         LoadCurrentDocument();
     }
 
-    private async void FilterTextBox_TextChanged(object sender, TextChangedEventArgs e) =>
+    private async void FilterTextBox_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        if (SearchHint is not null)
+        {
+            SearchHint.Visibility = string.IsNullOrEmpty(SearchBox.Text)
+                ? Visibility.Visible
+                : Visibility.Collapsed;
+        }
         await viewModel.RefreshAsync();
+    }
 
     private void DocumentMenuButton_Click(object sender, RoutedEventArgs e)
     {
