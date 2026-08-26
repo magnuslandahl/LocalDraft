@@ -3,58 +3,67 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Inställningar" Height="610" Width="650" WindowStartupLocation="CenterOwner"
         Background="{StaticResource CanvasBrush}">
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <StackPanel Margin="28">
-            <TextBlock x:Name="HeadingText" Text="Inställningar" FontSize="25" FontWeight="SemiBold"/>
-            <TextBlock x:Name="IntroText" Text="Välj den mikrofon som ska användas för diktering."
-                       TextWrapping="Wrap" Margin="0,8,0,20" Foreground="#475467"/>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="28,28,28,12">
+                <TextBlock x:Name="HeadingText" Text="Inställningar" FontSize="25" FontWeight="SemiBold"/>
+                <TextBlock x:Name="IntroText" Text="Välj den mikrofon som ska användas för diktering."
+                           TextWrapping="Wrap" Margin="0,8,0,20" Foreground="#475467"/>
 
-            <Border Background="{StaticResource SuccessSurfaceBrush}" CornerRadius="12"
-                    Padding="14" Margin="0,0,0,16">
-                <StackPanel>
-                    <TextBlock Text="100 % lokalt" FontWeight="SemiBold" Foreground="#216E39"/>
-                    <TextBlock Text="Dokument, inspelningar och AI-bearbetning stannar i appmappen. Appen använder ingen molntjänst."
-                               TextWrapping="Wrap" Margin="0,4,0,0"/>
-                </StackPanel>
-            </Border>
-
-            <TextBlock Text="Mikrofon" FontWeight="SemiBold"/>
-            <ComboBox x:Name="DeviceBox" Height="38" DisplayMemberPath="Name" Margin="0,6,0,8"
-                      AutomationProperties.Name="Mikrofon"/>
-            <Button x:Name="TestButton" Content="Testa mikrofon" HorizontalAlignment="Left"
-                    Click="TestButton_Click"/>
-            <Border Background="White" BorderBrush="{StaticResource BorderBrush}"
-                    BorderThickness="1" CornerRadius="10"
-                    Height="48" Margin="0,8,0,18">
-                <Grid Margin="10">
-                    <Rectangle Fill="#E5E7EB" Height="8" RadiusX="4" RadiusY="4"/>
-                    <Rectangle x:Name="LevelBar" Fill="#1E5AA8" Height="20" Width="0"
-                               RadiusX="4" RadiusY="4" HorizontalAlignment="Left"/>
-                </Grid>
-            </Border>
-
-            <Button Content="Vad innebär 100 % lokalt?" HorizontalAlignment="Left"
-                    Click="PrivacyDetailsButton_Click"/>
-
-            <StackPanel x:Name="StorageSection">
-                <TextBlock Text="Lagringsplats" FontWeight="SemiBold" Margin="0,14,0,0"/>
-                <TextBlock x:Name="PathText" TextWrapping="Wrap" Margin="0,5,0,8"/>
-                <WrapPanel>
-                    <Button Content="Öppna appmappen" Click="OpenFolderButton_Click"/>
-                    <Button Content="Om appen" Click="AboutButton_Click"/>
-                </WrapPanel>
-
-                <Border Background="#FFF4CE" CornerRadius="12" Padding="14" Margin="0,16">
-                    <TextBlock TextWrapping="Wrap"
-                               Text="Placera inte appen i OneDrive, Dropbox, Google Drive eller en nätverksmapp. Windows urklippshistorik kan spara text som du själv kopierar och kan stängas av i Windows inställningar."/>
+                <Border Background="{StaticResource SuccessSurfaceBrush}" CornerRadius="12"
+                        Padding="14" Margin="0,0,0,16">
+                    <StackPanel>
+                        <TextBlock Text="100 % lokalt" FontWeight="SemiBold" Foreground="#216E39"/>
+                        <TextBlock Text="Dokument, inspelningar och AI-bearbetning stannar i appmappen. Appen använder ingen molntjänst."
+                                   TextWrapping="Wrap" Margin="0,4,0,0"/>
+                    </StackPanel>
                 </Border>
-            </StackPanel>
 
+                <TextBlock Text="Mikrofon" FontWeight="SemiBold"/>
+                <ComboBox x:Name="DeviceBox" Height="38" DisplayMemberPath="Name" Margin="0,6,0,8"
+                          AutomationProperties.Name="Mikrofon"/>
+                <Button x:Name="TestButton" Content="Testa mikrofon" HorizontalAlignment="Left"
+                        Click="TestButton_Click"/>
+                <Border Background="White" BorderBrush="{StaticResource BorderBrush}"
+                        BorderThickness="1" CornerRadius="10"
+                        Height="48" Margin="0,8,0,18">
+                    <Grid Margin="10">
+                        <Rectangle Fill="#E5E7EB" Height="8" RadiusX="4" RadiusY="4"/>
+                        <Rectangle x:Name="LevelBar" Fill="#1E5AA8" Height="20" Width="0"
+                                   RadiusX="4" RadiusY="4" HorizontalAlignment="Left"/>
+                    </Grid>
+                </Border>
+
+                <Button Content="Vad innebär 100 % lokalt?" HorizontalAlignment="Left"
+                        Click="PrivacyDetailsButton_Click"/>
+
+                <StackPanel x:Name="StorageSection">
+                    <TextBlock Text="Lagringsplats" FontWeight="SemiBold" Margin="0,14,0,0"/>
+                    <TextBlock x:Name="PathText" TextWrapping="Wrap" Margin="0,5,0,8"/>
+                    <WrapPanel>
+                        <Button Content="Öppna appmappen" Click="OpenFolderButton_Click"/>
+                        <Button Content="Om appen" Click="AboutButton_Click"/>
+                    </WrapPanel>
+
+                    <Border Background="#FFF4CE" CornerRadius="12" Padding="14" Margin="0,16">
+                        <TextBlock TextWrapping="Wrap"
+                                   Text="Placera inte appen i OneDrive, Dropbox, Google Drive eller en nätverksmapp. Windows urklippshistorik kan spara text som du själv kopierar och kan stängas av i Windows inställningar."/>
+                    </Border>
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+
+        <Border Grid.Row="1" Background="White" BorderBrush="{StaticResource BorderBrush}"
+                BorderThickness="0,1,0,0" Padding="20,12">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button x:Name="CancelButton" Content="Avbryt" IsCancel="True"/>
                 <Button Content="Spara och fortsätt" Style="{StaticResource PrimaryButton}" IsDefault="True"
                         Click="SaveButton_Click"/>
             </StackPanel>
-        </StackPanel>
-    </ScrollViewer>
+        </Border>
+    </Grid>
 </Window>
