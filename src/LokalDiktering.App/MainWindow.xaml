@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LokalDiktering.App"
         mc:Ignorable="d"
-        Title="Lokal Diktering" Height="820" Width="1380" MinHeight="650" MinWidth="1050"
+        Title="Lokal Diktering" Height="820" Width="1280" MinHeight="650" MinWidth="960"
         Background="#EEF1F5" WindowStartupLocation="CenterScreen">
     <DockPanel>
         <Border DockPanel.Dock="Top" Background="White" BorderBrush="{StaticResource BorderBrush}"
@@ -35,19 +35,36 @@
 
         <Grid Margin="12">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="260"/>
-                <ColumnDefinition Width="8"/>
+                <ColumnDefinition Width="250"/>
+                <ColumnDefinition Width="10"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="8"/>
-                <ColumnDefinition Width="320"/>
             </Grid.ColumnDefinitions>
 
             <Border x:Name="DocumentSidebar" Grid.Column="0" Background="White" CornerRadius="8" Padding="12">
                 <DockPanel>
-                    <Button DockPanel.Dock="Top" Content="+  Nytt dokument" Style="{StaticResource PrimaryButton}"
-                            AutomationProperties.Name="Nytt dokument" Click="NewDocumentButton_Click"/>
-                    <Button DockPanel.Dock="Bottom" Content="Ta bort dokument…" Foreground="#A4262C"
-                            Click="DeleteDocumentButton_Click"/>
+                    <Grid DockPanel.Dock="Top">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Content="+  Nytt dokument" Style="{StaticResource PrimaryButton}"
+                               AutomationProperties.Name="Nytt dokument" Click="NewDocumentButton_Click"/>
+                        <Button x:Name="DocumentMenuButton" Grid.Column="1" Content="⋯" Width="40"
+                               ToolTip="Fler dokumentåtgärder" AutomationProperties.Name="Fler dokumentåtgärder"
+                               Click="DocumentMenuButton_Click">
+                            <Button.ContextMenu>
+                               <ContextMenu x:Name="DocumentMenu">
+                                   <MenuItem Header="Inspelningar" Click="RecordingsButton_Click"/>
+                                   <MenuItem Header="Versioner" Click="VersionsButton_Click"/>
+                                   <Separator/>
+                                   <MenuItem Header="Kopiera allt" Click="CopyAllButton_Click"/>
+                                   <Separator/>
+                                   <MenuItem Header="Ta bort dokument…" Foreground="#A4262C"
+                                             Click="DeleteDocumentButton_Click"/>
+                               </ContextMenu>
+                            </Button.ContextMenu>
+                        </Button>
+                    </Grid>
                     <TextBox DockPanel.Dock="Top" Margin="3,10,3,8" Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged}"
                              ToolTip="Sök dokument" AutomationProperties.Name="Sök dokument"
                              TextChanged="FilterTextBox_TextChanged"/>
@@ -67,95 +84,105 @@
                 </DockPanel>
             </Border>
 
-            <Border x:Name="EditorPanel" Grid.Column="2" Background="White" CornerRadius="8" Padding="16">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <TextBox x:Name="TitleBox" FontSize="20" FontWeight="SemiBold" BorderThickness="0"
-                             AutomationProperties.Name="Dokumenttitel" TextChanged="EditorChanged"/>
-                    <WrapPanel Grid.Row="1" Margin="0,10,0,10">
-                        <ComboBox x:Name="StyleBox" Width="125" Height="36" SelectedIndex="0"
-                                  SelectionChanged="StyleBox_SelectionChanged">
-                            <ComboBoxItem Content="Brödtext"/>
-                            <ComboBoxItem Content="Rubrik 1"/>
-                            <ComboBoxItem Content="Rubrik 2"/>
-                        </ComboBox>
-                        <Button Content="Fet" FontWeight="Bold" Click="BoldButton_Click"/>
-                        <Button Content="Kursiv" FontStyle="Italic" Click="ItalicButton_Click"/>
-                        <Button Content="Punktlista" Click="BulletButton_Click"/>
-                        <Button Content="Ångra" Click="UndoButton_Click"/>
-                        <Button Content="Gör om" Click="RedoButton_Click"/>
-                        <Button Content="Kopiera" Click="CopyButton_Click"/>
-                        <Button Content="Klistra in" Click="PasteButton_Click"/>
-                        <Button Content="Kopiera allt" Click="CopyAllButton_Click"/>
-                    </WrapPanel>
-                    <RichTextBox x:Name="Editor" Grid.Row="2" BorderBrush="{StaticResource BorderBrush}"
-                                 BorderThickness="1" Padding="18" FontFamily="Segoe UI" FontSize="15"
-                                 VerticalScrollBarVisibility="Auto" AcceptsTab="True"
-                                 TextChanged="EditorChanged" SelectionChanged="Editor_SelectionChanged"
-                                 AutomationProperties.Name="Dokumenttext"/>
-                    <Grid Grid.Row="3" Margin="0,12,0,0">
-                        <StackPanel Orientation="Horizontal">
-                            <Button Content="🎙  Diktera" FontSize="17" Padding="22,10"
-                                    Style="{StaticResource PrimaryButton}" Click="DictateButton_Click"
-                                    AutomationProperties.Name="Diktera"/>
-                            <Button Content="Inspelningar" Click="RecordingsButton_Click"/>
-                            <Button Content="Versioner" Click="VersionsButton_Click"/>
-                        </StackPanel>
-                        <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="#667085"
-                                   Text="Sparas automatiskt"/>
-                    </Grid>
-                </Grid>
-            </Border>
-
-            <Border x:Name="AssistantPanel" Grid.Column="4" Background="White" CornerRadius="8" Padding="16">
-                <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <StackPanel>
-                        <TextBlock Text="Textassistent" FontSize="19" FontWeight="SemiBold"/>
-                        <TextBlock x:Name="AssistantScope" Text="Hela dokumentet" Foreground="#667085" Margin="0,4,0,12"/>
-                        <ListBox x:Name="AssistantHistoryList" Height="105" Margin="0,0,0,8"
-                                 BorderBrush="{StaticResource BorderBrush}">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel Margin="5">
-                                        <TextBlock Text="{Binding Action}" FontWeight="SemiBold"/>
-                                        <TextBlock Text="{Binding Result}" TextTrimming="CharacterEllipsis" Foreground="#667085"/>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
-                        <Button Content="Rensa chatt" HorizontalAlignment="Right" Padding="8,4"
-                                MinHeight="28" Click="ClearHistoryButton_Click"/>
-                        <Button Content="Renskriv" Tag="Cleanup" Click="AssistantActionButton_Click"/>
-                        <Button Content="Sammanfatta" Tag="Summarize" Click="AssistantActionButton_Click"/>
-                        <Button Content="Strukturera" Tag="Structure" Click="AssistantActionButton_Click"/>
-                        <Button Content="Förbättra språket" Tag="Improve" Click="AssistantActionButton_Click"/>
-                        <Button Content="Gör punktlista" Tag="BulletList" Click="AssistantActionButton_Click"/>
-                        <TextBlock Text="Egen instruktion" FontWeight="SemiBold" Margin="3,14,3,5"/>
-                        <TextBox x:Name="CustomInstruction" AcceptsReturn="True" Height="90" TextWrapping="Wrap"
-                                 ToolTip="Skriv vad du vill ändra, till exempel: Gör texten tydligare och dela upp den i rubriker."/>
-                        <Button Content="Skicka" Tag="Custom" Style="{StaticResource PrimaryButton}"
-                                Click="AssistantActionButton_Click"/>
-                        <Border x:Name="PreviewPanel" Visibility="Collapsed" Background="{StaticResource SubtleBrush}"
-                                CornerRadius="6" Padding="10" Margin="0,14,0,0">
-                            <StackPanel>
-                                <TextBlock Text="Förslag" FontWeight="SemiBold" FontSize="16"/>
-                                <TextBox x:Name="AssistantPreviewBox" IsReadOnly="True" AcceptsReturn="True"
-                                         TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" Height="220" Margin="0,8"/>
-                                <Button x:Name="ApplyAssistantButton" Content="Ersätt hela dokumentet"
-                                        Style="{StaticResource PrimaryButton}" Click="ApplyAssistantButton_Click"/>
-                                <Button Content="Infoga vid markören" Click="InsertAssistantButton_Click"/>
-                                <Button Content="Kopiera" Click="CopyAssistantButton_Click"/>
-                                <Button Content="Avbryt" Click="CancelAssistantButton_Click"/>
+            <Grid Grid.Column="2">
+                <Border x:Name="EditorPanel" Background="White" CornerRadius="8" Padding="16">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBox x:Name="TitleBox" FontSize="20" FontWeight="SemiBold" BorderThickness="0"
+                                 AutomationProperties.Name="Dokumenttitel" TextChanged="EditorChanged"/>
+                        <WrapPanel Grid.Row="1" Margin="0,10,0,10">
+                            <ComboBox x:Name="StyleBox" Width="125" Height="36" SelectedIndex="0"
+                                      SelectionChanged="StyleBox_SelectionChanged">
+                                <ComboBoxItem Content="Brödtext"/>
+                                <ComboBoxItem Content="Rubrik 1"/>
+                                <ComboBoxItem Content="Rubrik 2"/>
+                            </ComboBox>
+                            <Button Content="Fet" FontWeight="Bold" Click="BoldButton_Click"/>
+                            <Button Content="Kursiv" FontStyle="Italic" Click="ItalicButton_Click"/>
+                            <Button Content="Punktlista" Click="BulletButton_Click"/>
+                            <Button Content="Ångra" Click="UndoButton_Click"/>
+                            <Button Content="Gör om" Click="RedoButton_Click"/>
+                        </WrapPanel>
+                        <RichTextBox x:Name="Editor" Grid.Row="2" BorderBrush="{StaticResource BorderBrush}"
+                                     BorderThickness="1" Padding="18" FontFamily="Segoe UI" FontSize="15"
+                                     VerticalScrollBarVisibility="Auto" AcceptsTab="True"
+                                     TextChanged="EditorChanged" SelectionChanged="Editor_SelectionChanged"
+                                     AutomationProperties.Name="Dokumenttext"/>
+                        <Grid Grid.Row="3" Margin="0,12,0,0">
+                            <StackPanel Orientation="Horizontal">
+                                <Button Content="🎙  Diktera" FontSize="17" Padding="22,10"
+                                        Style="{StaticResource PrimaryButton}" Click="DictateButton_Click"
+                                        AutomationProperties.Name="Diktera"/>
+                                <Button Content="Textassistent" Click="OpenAssistantButton_Click"
+                                        AutomationProperties.Name="Öppna textassistent"/>
                             </StackPanel>
-                        </Border>
-                    </StackPanel>
-                </ScrollViewer>
-            </Border>
+                            <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="#667085"
+                                       Text="Sparas automatiskt"/>
+                        </Grid>
+                    </Grid>
+                </Border>
+
+                <Border x:Name="AssistantPanel" Visibility="Collapsed" Panel.ZIndex="10"
+                        Width="370" HorizontalAlignment="Right" Margin="12"
+                        Background="White" BorderBrush="{StaticResource BorderBrush}"
+                        BorderThickness="1" CornerRadius="8" Padding="16">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel>
+                            <Grid>
+                                <TextBlock Text="Textassistent" FontSize="19" FontWeight="SemiBold"
+                                           VerticalAlignment="Center"/>
+                                <Button Content="Stäng" HorizontalAlignment="Right" Padding="8,4"
+                                        MinHeight="28" Click="CloseAssistantPanelButton_Click"/>
+                            </Grid>
+                            <TextBlock x:Name="AssistantScope" Text="Hela dokumentet" Foreground="#667085"
+                                       Margin="0,4,0,12"/>
+                            <ListBox x:Name="AssistantHistoryList" Height="105" Margin="0,0,0,8"
+                                     BorderBrush="{StaticResource BorderBrush}">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Margin="5">
+                                            <TextBlock Text="{Binding Action}" FontWeight="SemiBold"/>
+                                            <TextBlock Text="{Binding Result}" TextTrimming="CharacterEllipsis"
+                                                       Foreground="#667085"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                            <Button Content="Rensa chatt" HorizontalAlignment="Right" Padding="8,4"
+                                    MinHeight="28" Click="ClearHistoryButton_Click"/>
+                            <Button Content="Renskriv" Tag="Cleanup" Click="AssistantActionButton_Click"/>
+                            <Button Content="Sammanfatta" Tag="Summarize" Click="AssistantActionButton_Click"/>
+                            <Button Content="Strukturera" Tag="Structure" Click="AssistantActionButton_Click"/>
+                            <Button Content="Förbättra språket" Tag="Improve" Click="AssistantActionButton_Click"/>
+                            <Button Content="Gör punktlista" Tag="BulletList" Click="AssistantActionButton_Click"/>
+                            <TextBlock Text="Egen instruktion" FontWeight="SemiBold" Margin="3,14,3,5"/>
+                            <TextBox x:Name="CustomInstruction" AcceptsReturn="True" Height="90" TextWrapping="Wrap"
+                                     ToolTip="Skriv vad du vill ändra, till exempel: Gör texten tydligare och dela upp den i rubriker."/>
+                            <Button Content="Skicka" Tag="Custom" Style="{StaticResource PrimaryButton}"
+                                    Click="AssistantActionButton_Click"/>
+                            <Border x:Name="PreviewPanel" Visibility="Collapsed" Background="{StaticResource SubtleBrush}"
+                                    CornerRadius="6" Padding="10" Margin="0,14,0,0">
+                                <StackPanel>
+                                    <TextBlock Text="Förslag" FontWeight="SemiBold" FontSize="16"/>
+                                    <TextBox x:Name="AssistantPreviewBox" IsReadOnly="True" AcceptsReturn="True"
+                                             TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"
+                                             Height="220" Margin="0,8"/>
+                                    <Button x:Name="ApplyAssistantButton" Content="Ersätt hela dokumentet"
+                                            Style="{StaticResource PrimaryButton}" Click="ApplyAssistantButton_Click"/>
+                                    <Button Content="Infoga vid markören" Click="InsertAssistantButton_Click"/>
+                                    <Button Content="Kopiera" Click="CopyAssistantButton_Click"/>
+                                    <Button Content="Avbryt" Click="CancelAssistantButton_Click"/>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Border>
+            </Grid>
         </Grid>
     </DockPanel>
 </Window>

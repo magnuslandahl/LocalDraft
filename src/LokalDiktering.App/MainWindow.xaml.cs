@@ -94,6 +94,12 @@ public partial class MainWindow : Window
     private async void FilterTextBox_TextChanged(object sender, TextChangedEventArgs e) =>
         await viewModel.RefreshAsync();
 
+    private void DocumentMenuButton_Click(object sender, RoutedEventArgs e)
+    {
+        DocumentMenu.PlacementTarget = DocumentMenuButton;
+        DocumentMenu.IsOpen = true;
+    }
+
     private async void DeleteDocumentButton_Click(object sender, RoutedEventArgs e)
     {
         if (viewModel.Current is not { } current)
@@ -237,6 +243,19 @@ public partial class MainWindow : Window
     private void Editor_SelectionChanged(object sender, RoutedEventArgs e)
     {
         AssistantScope.Text = Editor.Selection.IsEmpty ? "Hela dokumentet" : "Markerad text";
+    }
+
+    private void OpenAssistantButton_Click(object sender, RoutedEventArgs e)
+    {
+        AssistantPanel.Visibility = Visibility.Visible;
+        CustomInstruction.Focus();
+    }
+
+    private void CloseAssistantPanelButton_Click(object sender, RoutedEventArgs e)
+    {
+        CloseAssistantPreview();
+        AssistantPanel.Visibility = Visibility.Collapsed;
+        Editor.Focus();
     }
 
     private async void DictateButton_Click(object sender, RoutedEventArgs e)
