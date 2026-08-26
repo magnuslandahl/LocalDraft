@@ -76,7 +76,7 @@
                                ToolTip="Fler dokumentåtgärder" AutomationProperties.Name="Fler dokumentåtgärder"
                                Click="DocumentMenuButton_Click">
                             <Button.ContextMenu>
-                               <ContextMenu x:Name="DocumentMenu">
+                               <ContextMenu x:Name="DocumentMenu" Placement="Bottom">
                                    <MenuItem Header="Inspelningar" Click="RecordingsButton_Click"/>
                                    <MenuItem Header="Versioner" Click="VersionsButton_Click"/>
                                    <Separator/>
