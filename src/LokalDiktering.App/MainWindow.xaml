@@ -243,9 +243,14 @@
                                             MinHeight="28" Click="ClearHistoryButton_Click"/>
                                 </StackPanel>
                                 <TextBlock Text="Snabbval" FontWeight="SemiBold" Margin="3,8,3,5"/>
-                                <Button Content="Renskriv" Tag="Cleanup" Click="AssistantActionButton_Click"/>
-                                <Button Content="Förbättra språket" Tag="Improve" Click="AssistantActionButton_Click"/>
-                                <Button Content="Sammanfatta" Tag="Summarize" Click="AssistantActionButton_Click"/>
+                                <UniformGrid Columns="3">
+                                    <Button Content="Renskriv" Tag="Cleanup" Padding="7" FontSize="12"
+                                            Click="AssistantActionButton_Click"/>
+                                    <Button Content="Förbättra" Tag="Improve" Padding="7" FontSize="12"
+                                            Click="AssistantActionButton_Click"/>
+                                    <Button Content="Sammanfatta" Tag="Summarize" Padding="7" FontSize="12"
+                                            Click="AssistantActionButton_Click"/>
+                                </UniformGrid>
                                 <Expander Header="Fler åtgärder" Margin="3,6">
                                     <StackPanel>
                                         <Button Content="Strukturera" Tag="Structure"
@@ -255,9 +260,16 @@
                                     </StackPanel>
                                 </Expander>
                                 <TextBlock Text="Egen instruktion" FontWeight="SemiBold" Margin="3,14,3,5"/>
-                                <TextBox x:Name="CustomInstruction" AcceptsReturn="True" Height="90" TextWrapping="Wrap"
-                                         AutomationProperties.Name="Egen instruktion till textassistenten"
-                                         ToolTip="Skriv vad du vill ändra, till exempel: Gör texten tydligare och dela upp den i rubriker."/>
+                                <Grid>
+                                    <TextBox x:Name="CustomInstruction" AcceptsReturn="True" Height="90"
+                                             TextWrapping="Wrap" TextChanged="CustomInstruction_TextChanged"
+                                             AutomationProperties.Name="Egen instruktion till textassistenten"
+                                             ToolTip="Skriv vad du vill ändra, till exempel: Gör texten tydligare och dela upp den i rubriker."/>
+                                    <TextBlock x:Name="CustomInstructionHint"
+                                               Text="Exempel: Gör texten tydligare och dela upp den i rubriker."
+                                               Foreground="#8290A3" TextWrapping="Wrap" Margin="14,10"
+                                               VerticalAlignment="Top" IsHitTestVisible="False"/>
+                                </Grid>
                                 <Button Content="Kör instruktionen" Tag="Custom" Style="{StaticResource PrimaryButton}"
                                         Click="AssistantActionButton_Click"/>
                             </StackPanel>

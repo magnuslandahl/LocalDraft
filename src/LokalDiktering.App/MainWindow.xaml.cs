@@ -106,6 +106,16 @@ public partial class MainWindow : Window
         await viewModel.RefreshAsync();
     }
 
+    private void CustomInstruction_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        if (CustomInstructionHint is not null)
+        {
+            CustomInstructionHint.Visibility = string.IsNullOrWhiteSpace(CustomInstruction.Text)
+                ? Visibility.Visible
+                : Visibility.Collapsed;
+        }
+    }
+
     private void DocumentMenuButton_Click(object sender, RoutedEventArgs e)
     {
         DocumentMenu.PlacementTarget = DocumentMenuButton;
