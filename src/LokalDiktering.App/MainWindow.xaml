@@ -25,11 +25,14 @@
                 <TextBlock Grid.Column="1" Text="Lokal Diktering" FontSize="21" FontWeight="SemiBold"
                            Foreground="{StaticResource TextBrush}" VerticalAlignment="Center"/>
                 <Border x:Name="LocalBadge" Grid.Column="2" Background="{StaticResource SuccessSurfaceBrush}"
-                        CornerRadius="16" Padding="12,6">
+                        CornerRadius="16" Padding="12,6" ToolTip="All bearbetning sker lokalt"
+                        AutomationProperties.Name="100 procent lokalt">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="●" Foreground="{StaticResource SuccessBrush}"
-                                   FontSize="11" VerticalAlignment="Center" Margin="0,0,7,0"/>
-                        <TextBlock Text="100 % lokalt" Foreground="{StaticResource SuccessBrush}"
+                        <TextBlock Text="&#xE72E;" FontFamily="Segoe MDL2 Assets"
+                                   Foreground="{StaticResource SuccessBrush}"
+                                   FontSize="14" VerticalAlignment="Center" Margin="0,0,7,0"/>
+                        <TextBlock x:Name="LocalBadgeText" Text="100 % lokalt"
+                                   Foreground="{StaticResource SuccessBrush}"
                                    FontWeight="SemiBold"/>
                     </StackPanel>
                 </Border>

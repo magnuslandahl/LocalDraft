@@ -120,7 +120,9 @@ public partial class MainWindow : Window
 
     private void MainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
     {
-        LocalBadge.Visibility = ActualWidth < 1060 ? Visibility.Collapsed : Visibility.Visible;
+        var compactHeader = ActualWidth < 1060;
+        LocalBadgeText.Visibility = compactHeader ? Visibility.Collapsed : Visibility.Visible;
+        LocalBadge.Padding = compactHeader ? new Thickness(10, 7, 3, 7) : new Thickness(12, 6, 12, 6);
         if (ActualWidth < 1080)
         {
             SetSidebarVisible(false);
