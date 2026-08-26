@@ -1,0 +1,15 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/LokalDiktering.App/LokalDiktering.App.csproj" />
+    <Project Path="src/LokalDiktering.Core/LokalDiktering.Core.csproj" />
+    <Project Path="src/LokalDiktering.Infrastructure/LokalDiktering.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/LokalDiktering.App.Tests/LokalDiktering.App.Tests.csproj" />
+    <Project Path="tests/LokalDiktering.Core.Tests/LokalDiktering.Core.Tests.csproj" />
+    <Project Path="tests/LokalDiktering.Infrastructure.Tests/LokalDiktering.Infrastructure.Tests.csproj" />
+  </Folder>
+  <Folder Name="/tools/">
+    <Project Path="tools/LokalDiktering.Benchmark/LokalDiktering.Benchmark.csproj" />
+  </Folder>
+</Solution>

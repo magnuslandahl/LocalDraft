@@ -1,0 +1,12 @@
+bin/
+obj/
+Data/
+dist/
+artifacts/
+Models/Whisper/*.bin
+Models/Text/*.gguf
+Native/Whisper/*
+!Native/Whisper/.gitkeep
+LokalDiktering-Portable-win-x64.zip
+*.user
+*.suo

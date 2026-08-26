@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "models": [
+    {
+      "role": "Svensk taltranskribering",
+      "relativePath": "Whisper/ggml-small-q5_1.bin",
+      "source": "ggerganov/whisper.cpp",
+      "revision": "5359861c739e955e79d9a303bcbc70fb988958b1",
+      "sha256": "ae85e4a935d7a567bd102fe55afc16bb595bdb618e11b2fc7591bc08120411bb",
+      "size": 190085487,
+      "license": "MIT"
+    },
+    {
+      "role": "Svensk textredigering",
+      "relativePath": "Text/Qwen3-1.7B-Q4_K_M.gguf",
+      "source": "ggml-org/Qwen3-1.7B-GGUF",
+      "revision": "daeb8e2d528a760970442092f6bf1e55c3b659eb",
+      "sha256": "d2387ca2dbfee2ffabce7120d3770dadca0b293052bc2f0e138fdc940d9bc7b5",
+      "size": 1282439264,
+      "license": "Apache-2.0"
+    }
+  ]
+}
