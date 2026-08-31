@@ -14,6 +14,29 @@
     <Resource Include="Assets\LocalDraft.ico" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="..\..\Models\manifest.json"
+             Link="Models\manifest.json"
+             CopyToOutputDirectory="PreserveNewest"
+             CopyToPublishDirectory="Never" />
+    <Content Include="..\..\Models\Whisper\*.bin"
+             Link="Models\Whisper\%(Filename)%(Extension)"
+             CopyToOutputDirectory="PreserveNewest"
+             CopyToPublishDirectory="Never" />
+    <Content Include="..\..\Models\Text\*.gguf"
+             Link="Models\Text\%(Filename)%(Extension)"
+             CopyToOutputDirectory="PreserveNewest"
+             CopyToPublishDirectory="Never" />
+    <Content Include="..\..\Native\Whisper\*.dll"
+             Link="Native\Whisper\%(Filename)%(Extension)"
+             CopyToOutputDirectory="PreserveNewest"
+             CopyToPublishDirectory="Never" />
+    <Content Include="..\..\Native\Whisper\whisper-cli.exe"
+             Link="Native\Whisper\whisper-cli.exe"
+             CopyToOutputDirectory="PreserveNewest"
+             CopyToPublishDirectory="Never" />
+  </ItemGroup>
+
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <AssemblyName>LokalDiktering</AssemblyName>

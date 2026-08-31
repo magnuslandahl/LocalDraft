@@ -16,7 +16,9 @@ public partial class RecordingWindow : Window
     private readonly Guid documentId;
     private readonly Guid recordingId = Guid.NewGuid();
     private string? partialPath;
+    private AudioDevice? selectedDevice;
     private bool paused;
+    private bool closing;
 
     public RecordingWindow(
         IAudioDeviceService devices,
@@ -40,24 +42,62 @@ public partial class RecordingWindow : Window
 
     private async void RecordingWindow_Loaded(object sender, RoutedEventArgs e)
     {
+        await FindMicrophoneAndStartAsync();
+    }
+
+    private async Task FindMicrophoneAndStartAsync()
+    {
+        StartButton.IsEnabled = false;
+        StartButton.Content = "Startar…";
         try
         {
             var available = await devices.GetInputDevicesAsync();
+            if (closing)
+            {
+                return;
+            }
+
             var settings = await settingsService.LoadAsync();
-            DeviceBox.ItemsSource = available;
-            DeviceBox.SelectedItem = available.FirstOrDefault(x => x.Id == settings.SelectedMicrophoneId)
-                                     ?? available.FirstOrDefault();
-            StartButton.IsEnabled = DeviceBox.SelectedIndex >= 0;
-            if (DeviceBox.Items.Count == 0)
+            if (closing)
+            {
+                return;
+            }
+
+            selectedDevice = available.FirstOrDefault(x => x.Id == settings.SelectedMicrophoneId)
+                             ?? available.FirstOrDefault();
+            if (selectedDevice is null)
             {
                 StateText.Text = "Ingen mikrofon hittades";
-                DeviceBox.Visibility = Visibility.Visible;
-                DeviceToggleButton.Visibility = Visibility.Collapsed;
+                MicrophoneText.Text = "Ingen mikrofon vald";
+                StartButton.Content = "Sök efter mikrofon";
+                StartButton.IsEnabled = true;
+                return;
+            }
+
+            MicrophoneText.Text = selectedDevice.Name;
+            if (settings.SelectedMicrophoneId != selectedDevice.Id)
+            {
+                settings.SelectedMicrophoneId = selectedDevice.Id;
+                await settingsService.SaveAsync(settings);
+            }
+
+            if (!closing)
+            {
+                await StartRecordingAsync();
             }
         }
         catch (Exception)
         {
+            if (closing)
+            {
+                return;
+            }
+
+            selectedDevice = null;
             StateText.Text = "Mikrofonen kunde inte läsas. Kontrollera Windows mikrofonbehörighet.";
+            MicrophoneText.Text = "Mikrofonen är inte tillgänglig";
+            StartButton.Content = "Försök igen";
+            StartButton.IsEnabled = true;
         }
     }
 
@@ -69,42 +109,54 @@ public partial class RecordingWindow : Window
             return;
         }
 
-        if (DeviceBox.SelectedItem is not AudioDevice device)
+        if (selectedDevice is null)
+        {
+            await FindMicrophoneAndStartAsync();
+        }
+        else
+        {
+            await StartRecordingAsync();
+        }
+    }
+
+    private async Task StartRecordingAsync()
+    {
+        if (closing || selectedDevice is not { } device)
         {
             return;
         }
 
+        StartButton.IsEnabled = false;
+        StartButton.Content = "Startar…";
         var directory = Path.Combine(paths.GetDocumentDirectory(documentId), "recordings");
         Directory.CreateDirectory(directory);
         partialPath = Path.Combine(directory, $"{recordingId:D}.partial.wav");
         try
         {
-            var settings = await settingsService.LoadAsync();
-            settings.SelectedMicrophoneId = device.Id;
-            await settingsService.SaveAsync(settings);
             await recorder.StartAsync(device.Id, partialPath);
+            if (closing)
+            {
+                await recorder.CancelAsync();
+                return;
+            }
+
             RecordingDot.Fill = Brushes.Red;
             StateText.Text = "Spelar in…";
             StartButton.Content = "Klar – transkribera";
-            DeviceBox.IsEnabled = false;
-            DeviceToggleButton.IsEnabled = false;
+            StartButton.IsEnabled = true;
             PauseButton.Visibility = Visibility.Visible;
         }
         catch (Exception)
         {
+            if (closing)
+            {
+                return;
+            }
+
             StateText.Text = "Mikrofonen kunde inte startas. Kontrollera behörighet och försök igen.";
             StartButton.Content = "Försök igen";
+            StartButton.IsEnabled = true;
         }
-    }
-
-    private void DeviceToggleButton_Click(object sender, RoutedEventArgs e)
-    {
-        DeviceBox.Visibility = DeviceBox.Visibility == Visibility.Visible
-            ? Visibility.Collapsed
-            : Visibility.Visible;
-        DeviceToggleButton.Content = DeviceBox.Visibility == Visibility.Visible
-            ? "Dölj mikrofonval"
-            : "Byt mikrofon";
     }
 
     private void PauseButton_Click(object sender, RoutedEventArgs e)
@@ -151,12 +203,14 @@ public partial class RecordingWindow : Window
 
     private async void CancelButton_Click(object sender, RoutedEventArgs e)
     {
+        closing = true;
         await recorder.CancelAsync();
         DialogResult = false;
     }
 
     private async void RecordingWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
     {
+        closing = true;
         recorder.Progress -= Recorder_Progress;
         if (Outcome is null && recorder.IsRecording)
         {
@@ -170,7 +224,7 @@ public partial class RecordingWindow : Window
         Dispatcher.Invoke(() =>
         {
             ElapsedText.Text = progress.Elapsed.ToString(@"mm\:ss");
-            LevelBar.Width = Math.Max(2, Math.Min(480, progress.Level * 480));
+            LevelBar.Width = AudioLevelMeter.GetWidth(progress.Level, LevelTrack.ActualWidth);
         });
     }
 

@@ -19,9 +19,6 @@ public partial class MainWindowViewModel(
     [ObservableProperty]
     private bool isBusy;
 
-    [ObservableProperty]
-    private string filter = string.Empty;
-
     public LocalDocument? Current { get; private set; }
 
     public async Task InitializeAsync()
@@ -74,7 +71,7 @@ public partial class MainWindowViewModel(
             await versions.CommitAsync(documentId, content, versionReason);
         }
         Status = "Alla ändringar är sparade";
-        await RefreshAsync(documentId);
+        UpdateSummary(saved.Metadata);
     }
 
     public async Task DeleteCurrentAsync()
@@ -87,7 +84,6 @@ public partial class MainWindowViewModel(
         await documents.DeleteAsync(Current.Metadata.Id);
         Current = null;
         var remaining = await documents.ListAsync();
-        Filter = string.Empty;
         if (remaining.Count == 0)
         {
             await CreateAsync();
@@ -102,14 +98,47 @@ public partial class MainWindowViewModel(
     {
         var all = await documents.ListAsync();
         Documents.Clear();
-        foreach (var item in all.Where(x =>
-                     string.IsNullOrWhiteSpace(Filter) ||
-                     x.Title.Contains(Filter, StringComparison.CurrentCultureIgnoreCase)))
+        foreach (var item in all)
         {
             Documents.Add(item);
         }
 
         var id = selectedId ?? Current?.Metadata.Id;
         SelectedDocument = id is null ? null : Documents.FirstOrDefault(x => x.Id == id);
+    }
+
+    public void SelectCurrentDocument()
+    {
+        SelectedDocument = Current is null
+            ? null
+            : Documents.FirstOrDefault(x => x.Id == Current.Metadata.Id);
+    }
+
+    private void UpdateSummary(DocumentMetadata metadata)
+    {
+        var selectedId = SelectedDocument?.Id;
+        var summary = new DocumentSummary(metadata.Id, metadata.Title, metadata.ModifiedUtc);
+        var index = -1;
+        for (var itemIndex = 0; itemIndex < Documents.Count; itemIndex++)
+        {
+            if (Documents[itemIndex].Id == metadata.Id)
+            {
+                index = itemIndex;
+                break;
+            }
+        }
+
+        if (index < 0)
+        {
+            Documents.Insert(0, summary);
+        }
+        else
+        {
+            Documents[index] = summary;
+        }
+
+        SelectedDocument = selectedId is null
+            ? null
+            : Documents.FirstOrDefault(x => x.Id == selectedId);
     }
 }
