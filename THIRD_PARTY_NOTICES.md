@@ -1,6 +1,6 @@
 # Tredjepartsnotiser
 
-Lokal Diktering distribuerar eller använder följande tredjepartskomponenter:
+LocalDraft distribuerar eller använder följande tredjepartskomponenter:
 
 - .NET, CommunityToolkit.Mvvm och Microsoft.Extensions.DependencyInjection – Microsoft, MIT.
 - NAudio – Mark Heath och contributors, MIT.

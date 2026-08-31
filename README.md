@@ -1,6 +1,6 @@
-# Lokal Diktering
+# LocalDraft
 
-Lokal Diktering är en portabel WPF-app för svensk diktering, formaterad textredigering och lokal textbearbetning. Dokument, WAV-filer, versioner, modeller, temporära filer och loggar ligger under appmappen. Runtime-koden använder inga nätverks-API:er och öppnar ingen port.
+LocalDraft är en portabel WPF-app för svensk diktering, formaterad textredigering och lokal textbearbetning. Dokument, WAV-filer, versioner, modeller, temporära filer och loggar ligger under appmappen. Runtime-koden använder inga nätverks-API:er och öppnar ingen port.
 
 ## Implementationsplan och risker
 

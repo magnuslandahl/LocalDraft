@@ -36,7 +36,7 @@ public partial class App : Application
         {
             MessageBox.Show(
                 "Appen kan inte spara i den här mappen. Flytta hela appmappen till en lokal mapp där du har skrivbehörighet. Appen sparar aldrig information i AppData som reserv.",
-                "Lokal Diktering",
+                "LocalDraft",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
             Shutdown(2);
@@ -111,7 +111,7 @@ public partial class App : Application
         services?.GetService<ILocalLog>()?.Error("app.unhandled", e.Exception);
         MessageBox.Show(
             "Något gick fel. Dina senast sparade ändringar finns kvar. Starta om appen och försök igen.",
-            "Lokal Diktering",
+            "LocalDraft",
             MessageBoxButton.OK,
             MessageBoxImage.Error);
         e.Handled = true;

@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LokalDiktering.App"
         mc:Ignorable="d"
-        Title="Lokal Diktering" Height="820" Width="1280" MinHeight="650" MinWidth="960"
+        Title="LocalDraft" Icon="Assets/LocalDraft.ico"
+        Height="820" Width="1280" MinHeight="650" MinWidth="960"
         Background="{StaticResource CanvasBrush}" WindowStartupLocation="CenterScreen"
         PreviewKeyDown="MainWindow_PreviewKeyDown" SizeChanged="MainWindow_SizeChanged">
     <DockPanel>
@@ -22,7 +23,7 @@
                         Style="{StaticResource IconButton}" Margin="0,0,10,0"
                         ToolTip="Dölj dokumentlistan" AutomationProperties.Name="Visa eller dölj dokumentlistan"
                         Click="SidebarToggleButton_Click"/>
-                <TextBlock Grid.Column="1" Text="Lokal Diktering" FontSize="21" FontWeight="SemiBold"
+                <TextBlock Grid.Column="1" Text="LocalDraft" FontSize="21" FontWeight="SemiBold"
                            Foreground="{StaticResource TextBrush}" VerticalAlignment="Center"/>
                 <Border x:Name="LocalBadge" Grid.Column="2" Background="{StaticResource SuccessSurfaceBrush}"
                         CornerRadius="16" Padding="12,6" ToolTip="All bearbetning sker lokalt"

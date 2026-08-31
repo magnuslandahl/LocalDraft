@@ -32,7 +32,7 @@ public partial class SettingsWindow : Window
         if (firstRun)
         {
             Title = "Välkommen";
-            HeadingText.Text = "Välkommen till Lokal Diktering";
+            HeadingText.Text = "Välkommen till LocalDraft";
             IntroText.Text = "Allt sker lokalt på datorn. Börja med att välja och testa den mikrofon du vill diktera med.";
             CancelButton.Content = "Avsluta";
             StorageSection.Visibility = Visibility.Collapsed;
@@ -120,8 +120,8 @@ public partial class SettingsWindow : Window
 
     private void AboutButton_Click(object sender, RoutedEventArgs e) =>
         MessageBox.Show(
-            "Lokal Diktering\n\nSvensk diktering och textredigering som körs helt lokalt.\n\nModeller: Whisper small q5_1 och Qwen3 1.7B Q4_K_M.\nLicenser finns i appmappen.",
-            "Om Lokal Diktering",
+            "LocalDraft\n\nSvensk diktering och textredigering som körs helt lokalt.\n\nModeller: Whisper small q5_1 och Qwen3 1.7B Q4_K_M.\nLicenser finns i appmappen.",
+            "Om LocalDraft",
             MessageBoxButton.OK,
             MessageBoxImage.Information);
 

@@ -1,6 +1,6 @@
 # Integritet
 
-Lokal Diktering är utformad för lokal behandling utan nätverk. Runtime-projekten innehåller inte `HttpClient`, sockets, telemetri, fjärrloggning, uppdateringskontroll eller modelldownload. Whisper körs som en dold lokal process utan server och textmodellen körs i samma process genom LLamaSharp.
+LocalDraft är utformad för lokal behandling utan nätverk. Runtime-projekten innehåller inte `HttpClient`, sockets, telemetri, fjärrloggning, uppdateringskontroll eller modelldownload. Whisper körs som en dold lokal process utan server och textmodellen körs i samma process genom LLamaSharp.
 
 ## Lagring
 

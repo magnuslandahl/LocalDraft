@@ -12,6 +12,13 @@ public sealed class ProjectConfigurationTests
         Assert.Contains("<SelfContained>true</SelfContained>", project);
         Assert.Contains("<PublishSingleFile>false</PublishSingleFile>", project);
         Assert.Contains("<PublishTrimmed>false</PublishTrimmed>", project);
+        Assert.Contains("<ApplicationIcon>Assets\\LocalDraft.ico</ApplicationIcon>", project);
+        Assert.True(File.Exists(Path.Combine(
+            root,
+            "src",
+            "LokalDiktering.App",
+            "Assets",
+            "LocalDraft.ico")));
     }
 
     [Fact]
@@ -55,6 +62,8 @@ public sealed class ProjectConfigurationTests
         Assert.Contains("Diktera", xaml);
         Assert.Contains("Bearbeta text", xaml);
         Assert.Contains("100 % lokalt", xaml);
+        Assert.Contains("Title=\"LocalDraft\"", xaml);
+        Assert.Contains("Icon=\"Assets/LocalDraft.ico\"", xaml);
     }
 
     [Fact]

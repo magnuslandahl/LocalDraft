@@ -1,4 +1,4 @@
-# Användarguide – Lokal Diktering
+# Användarguide – LocalDraft
 
 1. Packa upp hela appens ZIP-fil till en vanlig lokal mapp där du får spara. Undvik OneDrive, Dropbox, Google Drive och nätverksmappar.
 2. Starta `LokalDiktering.exe`. Om Windows frågar om mikrofonåtkomst behöver du tillåta den.
