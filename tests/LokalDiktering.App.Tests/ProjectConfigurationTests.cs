@@ -127,6 +127,8 @@ public sealed class ProjectConfigurationTests
         Assert.Contains("Header=\"Fler alternativ\"", xaml);
         Assert.Contains("Style=\"{StaticResource ToolbarComboBox}\"", xaml);
         Assert.Contains("AutomationProperties.Name=\"Textstil\"", xaml);
+        Assert.Contains("x:Name=\"TitleBox\" FontSize=\"20\" FontWeight=\"SemiBold\"", xaml);
+        Assert.Contains("BorderThickness=\"0\" Padding=\"0\"", xaml);
         Assert.Contains("x:Name=\"DocumentSidebarRail\"", xaml);
         Assert.Contains("ToolTip=\"Dölj dokumentlistan\"", xaml);
         Assert.Contains("ToolTip=\"Visa dokumentlistan\"", xaml);
