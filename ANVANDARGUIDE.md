@@ -2,7 +2,7 @@
 
 1. Packa upp hela appens ZIP-fil till en vanlig lokal mapp där du får spara. Undvik OneDrive, Dropbox, Google Drive och nätverksmappar.
 2. Starta `LokalDiktering.exe`. Om Windows frågar om mikrofonåtkomst behöver du tillåta den.
-3. Klicka **Nytt dokument** eller välj ett dokument till vänster. Dokumentlistan kan döljas med menyikonen högst upp. Allt sparas automatiskt.
+3. Klicka **Nytt dokument** eller välj ett dokument till vänster. Dölj dokumentlistan med vänsterpilen i panelen och öppna den igen via fliken **Dokument**. I mindre fönster öppnas listan ovanpå redigeraren. Allt sparas automatiskt.
 4. Placera markören där texten ska hamna och klicka **Diktera**. Appen använder din sparade mikrofon. Klicka **Starta inspelning**, kontrollera ljudnivån och klicka sedan **Klar – transkribera**.
 5. Vänta medan talet transkriberas lokalt. Du kan avbryta transkriberingen; WAV-filen finns ändå kvar under dokumentmenyn **⋯ → Inspelningar**.
 6. Markera text och välj **Bearbeta markerad text**, eller öppna **Bearbeta text** för hela dokumentet. Välj sedan exempelvis **Renskriv**, **Förbättra** eller **Sammanfatta**. Läs alltid resultatet innan du ersätter eller infogar texten.

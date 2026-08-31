@@ -77,9 +77,13 @@ public sealed class ProjectConfigurationTests
         Assert.Contains("Content=\"Bearbeta markerad text\"", xaml);
         Assert.Contains("Header=\"Tidigare förslag\"", xaml);
         Assert.Contains("Header=\"Fler alternativ\"", xaml);
+        Assert.Contains("x:Name=\"DocumentSidebarRail\"", xaml);
+        Assert.Contains("ToolTip=\"Dölj dokumentlistan\"", xaml);
+        Assert.Contains("ToolTip=\"Visa dokumentlistan\"", xaml);
         Assert.Contains("<MenuItem Header=\"Inspelningar\"", xaml);
         Assert.Contains("<MenuItem Header=\"Versioner\"", xaml);
         Assert.Contains("<MenuItem Header=\"Ta bort dokument…\"", xaml);
+        Assert.DoesNotContain("Content=\"&#xE700;\"", xaml);
         Assert.DoesNotContain("<ColumnDefinition Width=\"320\"", xaml);
         Assert.DoesNotContain("Content=\"Kopiera allt\" Click=", xaml);
     }

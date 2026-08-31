@@ -32,6 +32,7 @@ public partial class MainWindow : Window
     private AssistantAction pendingAssistantAction;
     private bool closingAfterSave;
     private bool sidebarUserCollapsed;
+    private bool sidebarCompact;
     private readonly SemaphoreSlim saveLock = new(1, 1);
 
     public MainWindow(
@@ -133,13 +134,12 @@ public partial class MainWindow : Window
         var compactHeader = ActualWidth < 1060;
         LocalBadgeText.Visibility = compactHeader ? Visibility.Collapsed : Visibility.Visible;
         LocalBadge.Padding = compactHeader ? new Thickness(10, 7, 3, 7) : new Thickness(12, 6, 12, 6);
-        if (ActualWidth < 1080)
+
+        var compact = ActualWidth < 1080;
+        if (compact != sidebarCompact)
         {
-            SetSidebarVisible(false);
-        }
-        else if (!sidebarUserCollapsed)
-        {
-            SetSidebarVisible(true);
+            sidebarCompact = compact;
+            SetSidebarVisible(!compact && !sidebarUserCollapsed);
         }
     }
 
@@ -182,9 +182,17 @@ public partial class MainWindow : Window
     private void SetSidebarVisible(bool visible)
     {
         DocumentSidebar.Visibility = visible ? Visibility.Visible : Visibility.Collapsed;
-        DocumentColumn.Width = visible ? new GridLength(250) : new GridLength(0);
-        DocumentGapColumn.Width = visible ? new GridLength(10) : new GridLength(0);
-        SidebarToggleButton.ToolTip = visible ? "Dölj dokumentlistan" : "Visa dokumentlistan";
+        DocumentSidebarRail.Visibility = visible ? Visibility.Collapsed : Visibility.Visible;
+
+        var compactOverlay = visible && sidebarCompact;
+        DocumentColumn.Width = compactOverlay || !visible
+            ? new GridLength(52)
+            : new GridLength(250);
+        DocumentGapColumn.Width = new GridLength(10);
+        DocumentSidebar.Width = compactOverlay ? 250 : double.NaN;
+        DocumentSidebar.HorizontalAlignment = compactOverlay
+            ? HorizontalAlignment.Left
+            : HorizontalAlignment.Stretch;
     }
 
     private async void DeleteDocumentButton_Click(object sender, RoutedEventArgs e)
