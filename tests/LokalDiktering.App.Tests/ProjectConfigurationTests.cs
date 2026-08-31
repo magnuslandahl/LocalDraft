@@ -1,3 +1,5 @@
+using System.Collections.Specialized;
+
 namespace LokalDiktering.App.Tests;
 
 public sealed class ProjectConfigurationTests
@@ -12,6 +14,11 @@ public sealed class ProjectConfigurationTests
         Assert.Contains("<SelfContained>true</SelfContained>", project);
         Assert.Contains("<PublishSingleFile>false</PublishSingleFile>", project);
         Assert.Contains("<PublishTrimmed>false</PublishTrimmed>", project);
+        Assert.Contains(@"Include=""..\..\Models\manifest.json""", project);
+        Assert.Contains(@"Include=""..\..\Models\Whisper\*.bin""", project);
+        Assert.Contains(@"Include=""..\..\Models\Text\*.gguf""", project);
+        Assert.Contains(@"Include=""..\..\Native\Whisper\whisper-cli.exe""", project);
+        Assert.Contains(@"CopyToOutputDirectory=""PreserveNewest""", project);
         Assert.Contains("<ApplicationIcon>Assets\\LocalDraft.ico</ApplicationIcon>", project);
         Assert.True(File.Exists(Path.Combine(
             root,
@@ -22,7 +29,7 @@ public sealed class ProjectConfigurationTests
     }
 
     [Fact]
-    public async Task DeletingFilteredCurrentDocument_SelectsRemainingDocument()
+    public async Task DeletingCurrentDocument_SelectsRemainingDocument()
     {
         var root = Path.Combine(Path.GetTempPath(), "LokalDikteringAppTests", Guid.NewGuid().ToString("N"));
         try
@@ -36,13 +43,52 @@ public sealed class ProjectConfigurationTests
             var deleted = await repository.CreateAsync("Ta bort");
             await viewModel.RefreshAsync(deleted.Metadata.Id);
             await viewModel.OpenAsync(deleted.Metadata.Id);
-            viewModel.Filter = "inget synligt";
 
             await viewModel.DeleteCurrentAsync();
 
             Assert.NotNull(viewModel.Current);
             Assert.Equal("Behåll", viewModel.Current.Metadata.Title);
-            Assert.Empty(viewModel.Filter);
+        }
+        finally
+        {
+            if (Directory.Exists(root))
+            {
+                Directory.Delete(root, true);
+            }
+        }
+    }
+
+    [Fact]
+    public async Task SavingCurrentDocument_PreservesPendingSelectionWithoutResettingList()
+    {
+        var root = Path.Combine(Path.GetTempPath(), "LokalDikteringAppTests", Guid.NewGuid().ToString("N"));
+        try
+        {
+            var paths = new LokalDiktering.Infrastructure.AppPathService(root);
+            var repository = new LokalDiktering.Infrastructure.DocumentRepository(paths);
+            var viewModel = new LokalDiktering.App.MainWindowViewModel(
+                repository,
+                new LokalDiktering.Infrastructure.VersionService(paths));
+            await repository.CreateAsync("Första");
+            var current = await repository.CreateAsync("Andra");
+            var firstInList = await repository.CreateAsync("Tredje");
+            await viewModel.RefreshAsync(current.Metadata.Id);
+            await viewModel.OpenAsync(current.Metadata.Id);
+            var pendingSelection = viewModel.Documents.Single(x => x.Id == firstInList.Metadata.Id);
+            viewModel.SelectedDocument = pendingSelection;
+            var collectionChanges = new List<NotifyCollectionChangedAction>();
+            viewModel.Documents.CollectionChanged += (_, e) => collectionChanges.Add(e.Action);
+
+            await viewModel.SaveAsync(
+                current.Metadata.Id,
+                current.Metadata.Title,
+                current.Content,
+                "Manuell redigering");
+
+            Assert.Equal(firstInList.Metadata.Id, viewModel.SelectedDocument?.Id);
+            Assert.Equal(firstInList.Metadata.Id, viewModel.Documents[0].Id);
+            Assert.DoesNotContain(NotifyCollectionChangedAction.Reset, collectionChanges);
+            Assert.Equal(3, viewModel.Documents.Count);
         }
         finally
         {
@@ -64,6 +110,8 @@ public sealed class ProjectConfigurationTests
         Assert.Contains("100 % lokalt", xaml);
         Assert.Contains("Title=\"LocalDraft\"", xaml);
         Assert.Contains("Icon=\"Assets/LocalDraft.ico\"", xaml);
+        Assert.Contains("Source=\"{StaticResource LocalDraftLogo}\"", xaml);
+        Assert.Contains("AutomationProperties.Name=\"LocalDraft-logotyp\"", xaml);
     }
 
     [Fact]
@@ -77,11 +125,48 @@ public sealed class ProjectConfigurationTests
         Assert.Contains("Content=\"Bearbeta markerad text\"", xaml);
         Assert.Contains("Header=\"Tidigare förslag\"", xaml);
         Assert.Contains("Header=\"Fler alternativ\"", xaml);
+        Assert.Contains("Style=\"{StaticResource ToolbarComboBox}\"", xaml);
+        Assert.Contains("AutomationProperties.Name=\"Textstil\"", xaml);
+        Assert.Contains("x:Name=\"TitleBox\" FontSize=\"20\" FontWeight=\"SemiBold\"", xaml);
+        Assert.Contains("BorderThickness=\"0\" Padding=\"0\"", xaml);
+        Assert.Contains("x:Name=\"DocumentSidebarRail\"", xaml);
+        Assert.Contains("ToolTip=\"Dölj dokumentlistan\"", xaml);
+        Assert.Contains("ToolTip=\"Visa dokumentlistan\"", xaml);
         Assert.Contains("<MenuItem Header=\"Inspelningar\"", xaml);
         Assert.Contains("<MenuItem Header=\"Versioner\"", xaml);
         Assert.Contains("<MenuItem Header=\"Ta bort dokument…\"", xaml);
+        Assert.DoesNotContain("Content=\"&#xE700;\"", xaml);
         Assert.DoesNotContain("<ColumnDefinition Width=\"320\"", xaml);
         Assert.DoesNotContain("Content=\"Kopiera allt\" Click=", xaml);
+    }
+
+    [Fact]
+    public void RecordedReview_DocumentActionsBelongToEachDocument()
+    {
+        var root = FindRepositoryRoot();
+        var xaml = File.ReadAllText(Path.Combine(root, "src", "LokalDiktering.App", "MainWindow.xaml"));
+
+        Assert.Contains("Click=\"DocumentItemMenuButton_Click\"", xaml);
+        Assert.Contains("Header=\"Kopiera dokumenttext\"", xaml);
+        Assert.Contains("AutomationProperties.Name=\"Dokumentåtgärder\"", xaml);
+        Assert.DoesNotContain("x:Name=\"DocumentMenuButton\"", xaml);
+    }
+
+    [Fact]
+    public void RecordedReview_DictationStartsImmediatelyWithConfiguredMicrophone()
+    {
+        var root = FindRepositoryRoot();
+        var mainXaml = File.ReadAllText(Path.Combine(root, "src", "LokalDiktering.App", "MainWindow.xaml"));
+        var recordingXaml = File.ReadAllText(Path.Combine(root, "src", "LokalDiktering.App", "RecordingWindow.xaml"));
+        var recordingCode = File.ReadAllText(Path.Combine(root, "src", "LokalDiktering.App", "RecordingWindow.xaml.cs"));
+        var settingsXaml = File.ReadAllText(Path.Combine(root, "src", "LokalDiktering.App", "SettingsWindow.xaml"));
+
+        Assert.Contains("x:Name=\"SelectedMicrophoneText\"", mainXaml);
+        Assert.Contains("Inspelningen startar automatiskt", recordingXaml);
+        Assert.Contains("await StartRecordingAsync();", recordingCode);
+        Assert.DoesNotContain("Byt mikrofon", recordingXaml);
+        Assert.Contains("Style=\"{StaticResource ToolbarComboBox}\"", settingsXaml);
+        Assert.Contains("x:Name=\"TestStatusText\"", settingsXaml);
     }
 
     [Fact]

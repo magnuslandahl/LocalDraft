@@ -35,7 +35,9 @@ public partial class SettingsWindow : Window
             HeadingText.Text = "Välkommen till LocalDraft";
             IntroText.Text = "Allt sker lokalt på datorn. Börja med att välja och testa den mikrofon du vill diktera med.";
             CancelButton.Content = "Avsluta";
+            SaveButton.Content = "Spara och fortsätt";
             StorageSection.Visibility = Visibility.Collapsed;
+            MinHeight = 500;
             Height = 500;
         }
         Loaded += SettingsWindow_Loaded;
@@ -54,6 +56,7 @@ public partial class SettingsWindow : Window
         {
             TestButton.IsEnabled = false;
             IntroText.Text = "Ingen mikrofon hittades. Kontrollera Windows mikrofonbehörighet och anslut en mikrofon.";
+            TestStatusText.Text = "Ingen mikrofon hittades.";
         }
     }
 
@@ -77,6 +80,7 @@ public partial class SettingsWindow : Window
             testing = true;
             DeviceBox.IsEnabled = false;
             TestButton.Content = "Stoppa test";
+            TestStatusText.Text = "Lyssnar… tala med normal röst.";
         }
         catch (Exception)
         {
@@ -98,7 +102,8 @@ public partial class SettingsWindow : Window
         await recorder.CancelAsync();
         testing = false;
         DeviceBox.IsEnabled = true;
-        TestButton.Content = "Testa mikrofon";
+        TestButton.Content = "Starta mikrofontest";
+        TestStatusText.Text = "Mikrofontestet är stoppat.";
         LevelBar.Width = 0;
     }
 
@@ -140,5 +145,11 @@ public partial class SettingsWindow : Window
     }
 
     private void Recorder_Progress(object? sender, RecordingProgress progress) =>
-        Dispatcher.Invoke(() => LevelBar.Width = Math.Max(2, Math.Min(570, progress.Level * 570)));
+        Dispatcher.Invoke(() =>
+        {
+            LevelBar.Width = AudioLevelMeter.GetWidth(progress.Level, LevelTrack.ActualWidth);
+            TestStatusText.Text = progress.Level >= 0.02
+                ? "Bra signal"
+                : "Tala med normal röst";
+        });
 }

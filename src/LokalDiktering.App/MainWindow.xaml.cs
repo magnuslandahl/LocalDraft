@@ -32,7 +32,9 @@ public partial class MainWindow : Window
     private AssistantAction pendingAssistantAction;
     private bool closingAfterSave;
     private bool sidebarUserCollapsed;
+    private bool sidebarCompact;
     private readonly SemaphoreSlim saveLock = new(1, 1);
+    private readonly SemaphoreSlim documentSwitchLock = new(1, 1);
 
     public MainWindow(
         MainWindowViewModel viewModel,
@@ -70,6 +72,7 @@ public partial class MainWindow : Window
     {
         await viewModel.InitializeAsync();
         LoadCurrentDocument();
+        await RefreshSelectedMicrophoneAsync();
     }
 
     private async void NewDocumentButton_Click(object sender, RoutedEventArgs e) =>
@@ -84,26 +87,33 @@ public partial class MainWindow : Window
 
     private async void DocumentList_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        if (loading || DocumentList.SelectedItem is not DocumentSummary summary ||
+        if (loading || e.AddedItems.OfType<DocumentSummary>().FirstOrDefault() is not { } summary ||
             viewModel.Current?.Metadata.Id == summary.Id)
         {
             return;
         }
 
-        await AutosaveAsync(true);
-        await viewModel.OpenAsync(summary.Id);
-        LoadCurrentDocument();
-    }
-
-    private async void FilterTextBox_TextChanged(object sender, TextChangedEventArgs e)
-    {
-        if (SearchHint is not null)
+        await documentSwitchLock.WaitAsync();
+        try
         {
-            SearchHint.Visibility = string.IsNullOrEmpty(SearchBox.Text)
-                ? Visibility.Visible
-                : Visibility.Collapsed;
+            if (viewModel.Current?.Metadata.Id == summary.Id)
+            {
+                return;
+            }
+
+            if (!await AutosaveAsync(true))
+            {
+                viewModel.SelectCurrentDocument();
+                return;
+            }
+
+            await viewModel.OpenAsync(summary.Id);
+            LoadCurrentDocument();
         }
-        await viewModel.RefreshAsync();
+        finally
+        {
+            documentSwitchLock.Release();
+        }
     }
 
     private void CustomInstruction_TextChanged(object sender, TextChangedEventArgs e)
@@ -116,10 +126,20 @@ public partial class MainWindow : Window
         }
     }
 
-    private void DocumentMenuButton_Click(object sender, RoutedEventArgs e)
+    private void DocumentItemMenuButton_Click(object sender, RoutedEventArgs e)
     {
-        DocumentMenu.PlacementTarget = DocumentMenuButton;
-        DocumentMenu.IsOpen = true;
+        if (sender is not Button
+            {
+                DataContext: DocumentSummary summary,
+                ContextMenu: { } menu
+            } button)
+        {
+            return;
+        }
+
+        menu.DataContext = summary;
+        menu.PlacementTarget = button;
+        menu.IsOpen = true;
     }
 
     private void SidebarToggleButton_Click(object sender, RoutedEventArgs e)
@@ -133,13 +153,12 @@ public partial class MainWindow : Window
         var compactHeader = ActualWidth < 1060;
         LocalBadgeText.Visibility = compactHeader ? Visibility.Collapsed : Visibility.Visible;
         LocalBadge.Padding = compactHeader ? new Thickness(10, 7, 3, 7) : new Thickness(12, 6, 12, 6);
-        if (ActualWidth < 1080)
+
+        var compact = ActualWidth < 1080;
+        if (compact != sidebarCompact)
         {
-            SetSidebarVisible(false);
-        }
-        else if (!sidebarUserCollapsed)
-        {
-            SetSidebarVisible(true);
+            sidebarCompact = compact;
+            SetSidebarVisible(!compact && !sidebarUserCollapsed);
         }
     }
 
@@ -182,14 +201,23 @@ public partial class MainWindow : Window
     private void SetSidebarVisible(bool visible)
     {
         DocumentSidebar.Visibility = visible ? Visibility.Visible : Visibility.Collapsed;
-        DocumentColumn.Width = visible ? new GridLength(250) : new GridLength(0);
-        DocumentGapColumn.Width = visible ? new GridLength(10) : new GridLength(0);
-        SidebarToggleButton.ToolTip = visible ? "Dölj dokumentlistan" : "Visa dokumentlistan";
+        DocumentSidebarRail.Visibility = visible ? Visibility.Collapsed : Visibility.Visible;
+
+        var compactOverlay = visible && sidebarCompact;
+        DocumentColumn.Width = compactOverlay || !visible
+            ? new GridLength(52)
+            : new GridLength(250);
+        DocumentGapColumn.Width = new GridLength(10);
+        DocumentSidebar.Width = compactOverlay ? 250 : double.NaN;
+        DocumentSidebar.HorizontalAlignment = compactOverlay
+            ? HorizontalAlignment.Left
+            : HorizontalAlignment.Stretch;
     }
 
     private async void DeleteDocumentButton_Click(object sender, RoutedEventArgs e)
     {
-        if (viewModel.Current is not { } current)
+        if (!await ActivateDocumentForActionAsync(sender) ||
+            viewModel.Current is not { } current)
         {
             return;
         }
@@ -313,7 +341,13 @@ public partial class MainWindow : Window
 
     private void CopyButton_Click(object sender, RoutedEventArgs e) => Editor.Copy();
     private void PasteButton_Click(object sender, RoutedEventArgs e) => Editor.Paste();
-    private void CopyAllButton_Click(object sender, RoutedEventArgs e) => RichTextContent.CopyAll(Editor);
+    private async void CopyAllButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (await ActivateDocumentForActionAsync(sender))
+        {
+            RichTextContent.CopyAll(Editor);
+        }
+    }
 
     private void StyleBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
@@ -567,7 +601,8 @@ public partial class MainWindow : Window
 
     private async void VersionsButton_Click(object sender, RoutedEventArgs e)
     {
-        if (viewModel.Current is not { } current)
+        if (!await ActivateDocumentForActionAsync(sender) ||
+            viewModel.Current is not { } current)
         {
             return;
         }
@@ -586,7 +621,8 @@ public partial class MainWindow : Window
 
     private async void RecordingsButton_Click(object sender, RoutedEventArgs e)
     {
-        if (viewModel.Current is not { } current)
+        if (!await ActivateDocumentForActionAsync(sender) ||
+            viewModel.Current is not { } current)
         {
             return;
         }
@@ -621,7 +657,39 @@ public partial class MainWindow : Window
         }
     }
 
-    private void SettingsButton_Click(object sender, RoutedEventArgs e)
+    private async Task<bool> ActivateDocumentForActionAsync(object sender)
+    {
+        if (sender is not FrameworkElement { DataContext: DocumentSummary target } ||
+            viewModel.Current?.Metadata.Id == target.Id)
+        {
+            return viewModel.Current is not null;
+        }
+
+        await documentSwitchLock.WaitAsync();
+        try
+        {
+            if (viewModel.Current?.Metadata.Id == target.Id)
+            {
+                return true;
+            }
+
+            if (!await AutosaveAsync(true))
+            {
+                viewModel.SelectCurrentDocument();
+                return false;
+            }
+
+            await viewModel.OpenAsync(target.Id);
+            LoadCurrentDocument();
+            return true;
+        }
+        finally
+        {
+            documentSwitchLock.Release();
+        }
+    }
+
+    private async void SettingsButton_Click(object sender, RoutedEventArgs e)
     {
         var dialog = new SettingsWindow(
             services.GetRequiredService<IAudioDeviceService>(),
@@ -632,7 +700,28 @@ public partial class MainWindow : Window
         {
             Owner = this
         };
-        dialog.ShowDialog();
+        if (dialog.ShowDialog() == true)
+        {
+            await RefreshSelectedMicrophoneAsync();
+        }
+    }
+
+    private async Task RefreshSelectedMicrophoneAsync()
+    {
+        try
+        {
+            var settings = await services.GetRequiredService<ISettingsService>().LoadAsync();
+            var available = await audioDevices.GetInputDevicesAsync();
+            var selected = available.FirstOrDefault(x => x.Id == settings.SelectedMicrophoneId)
+                           ?? available.FirstOrDefault();
+            SelectedMicrophoneText.Text = selected?.Name ?? "Ingen mikrofon vald";
+            SelectedMicrophoneBadge.ToolTip = selected?.Name ?? "Välj mikrofon under Inställningar";
+        }
+        catch (Exception)
+        {
+            SelectedMicrophoneText.Text = "Mikrofon ej tillgänglig";
+            SelectedMicrophoneBadge.ToolTip = "Kontrollera mikrofonbehörigheten i Windows";
+        }
     }
 
     private async Task RunBusyAsync(string status, Func<CancellationToken, Task> action)
