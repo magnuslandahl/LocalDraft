@@ -53,7 +53,7 @@ public sealed class ProjectConfigurationTests
         var xaml = File.ReadAllText(Path.Combine(root, "src", "LokalDiktering.App", "MainWindow.xaml"));
         Assert.Contains("Nytt dokument", xaml);
         Assert.Contains("Diktera", xaml);
-        Assert.Contains("Textassistent", xaml);
+        Assert.Contains("Bearbeta text", xaml);
         Assert.Contains("100 % lokalt", xaml);
     }
 
@@ -65,6 +65,9 @@ public sealed class ProjectConfigurationTests
 
         Assert.Contains("x:Name=\"AssistantPanel\" Visibility=\"Collapsed\"", xaml);
         Assert.Contains("x:Name=\"SelectionAssistantBar\" Visibility=\"Collapsed\"", xaml);
+        Assert.Contains("Content=\"Bearbeta markerad text\"", xaml);
+        Assert.Contains("Header=\"Tidigare förslag\"", xaml);
+        Assert.Contains("Header=\"Fler alternativ\"", xaml);
         Assert.Contains("<MenuItem Header=\"Inspelningar\"", xaml);
         Assert.Contains("<MenuItem Header=\"Versioner\"", xaml);
         Assert.Contains("<MenuItem Header=\"Ta bort dokument…\"", xaml);

@@ -159,14 +159,8 @@
                                     Background="White" BorderBrush="{StaticResource BorderBrush}"
                                     BorderThickness="1" CornerRadius="10" Padding="4"
                                     Effect="{StaticResource PanelShadow}">
-                                <StackPanel Orientation="Horizontal">
-                                    <Button Content="Renskriv" Tag="Cleanup" Padding="8,4" MinHeight="30"
-                                            Click="AssistantActionButton_Click"/>
-                                    <Button Content="Förbättra" Tag="Improve" Padding="8,4" MinHeight="30"
-                                            Click="AssistantActionButton_Click"/>
-                                    <Button Content="Sammanfatta" Tag="Summarize" Padding="8,4" MinHeight="30"
-                                            Click="AssistantActionButton_Click"/>
-                                </StackPanel>
+                                <Button Content="Bearbeta markerad text" Padding="10,5" MinHeight="32"
+                                        Click="OpenAssistantButton_Click"/>
                             </Border>
                         </Grid>
                         <Grid Grid.Row="3" Margin="0,12,0,0">
@@ -185,13 +179,13 @@
                                     </StackPanel>
                                 </Button>
                                 <Button Click="OpenAssistantButton_Click"
-                                        ToolTip="Textassistent (Ctrl+Shift+A)"
-                                        AutomationProperties.Name="Öppna textassistent">
+                                        ToolTip="Bearbeta text (Ctrl+Shift+A)"
+                                        AutomationProperties.Name="Öppna verktyg för att bearbeta text">
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Text="✦" FontFamily="Segoe UI Symbol"
                                                    FontSize="17" Foreground="{StaticResource AccentBrush}"
                                                    Margin="0,0,8,0"/>
-                                        <TextBlock Text="Textassistent"/>
+                                        <TextBlock Text="Bearbeta text"/>
                                     </StackPanel>
                                 </Button>
                             </StackPanel>
@@ -215,43 +209,52 @@
                     <ScrollViewer VerticalScrollBarVisibility="Auto">
                         <StackPanel>
                             <Grid>
-                                <TextBlock Text="Textassistent" FontSize="19" FontWeight="SemiBold"
+                                <TextBlock Text="Bearbeta text" FontSize="19" FontWeight="SemiBold"
                                            VerticalAlignment="Center"/>
                                 <Button Content="&#xE711;" Style="{StaticResource IconButton}"
-                                        HorizontalAlignment="Right" ToolTip="Stäng textassistent"
-                                        AutomationProperties.Name="Stäng textassistent"
+                                        HorizontalAlignment="Right" ToolTip="Stäng textbearbetning"
+                                        AutomationProperties.Name="Stäng textbearbetning"
                                         Click="CloseAssistantPanelButton_Click"/>
                             </Grid>
-                            <TextBlock x:Name="AssistantScope" Text="Hela dokumentet" Foreground="#667085"
-                                       Margin="0,4,0,12" AutomationProperties.Name="Text som bearbetas"/>
+                            <Border Background="{StaticResource SubtleBrush}" CornerRadius="8"
+                                    Padding="10,8" Margin="0,8,0,12">
+                                <TextBlock x:Name="AssistantScope" Text="Bearbetar: hela dokumentet"
+                                           Foreground="{StaticResource SecondaryTextBrush}"
+                                           FontWeight="SemiBold"
+                                           AutomationProperties.Name="Text som bearbetas"/>
+                            </Border>
                             <StackPanel x:Name="AssistantComposerPanel">
-                                <StackPanel x:Name="AssistantHistorySection" Visibility="Collapsed">
-                                    <TextBlock Text="Senaste förslag" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                                    <ListBox x:Name="AssistantHistoryList" Height="105" Margin="0,0,0,5"
-                                             BorderBrush="{StaticResource BorderBrush}">
-                                        <ListBox.ItemTemplate>
-                                            <DataTemplate>
-                                                <StackPanel Margin="5">
-                                                    <TextBlock Text="{Binding Action}" FontWeight="SemiBold"/>
-                                                    <TextBlock Text="{Binding Result}" TextTrimming="CharacterEllipsis"
-                                                               Foreground="#667085"/>
-                                                </StackPanel>
-                                            </DataTemplate>
-                                        </ListBox.ItemTemplate>
-                                    </ListBox>
-                                    <Button Content="Rensa historik" HorizontalAlignment="Right" Padding="8,4"
-                                            MinHeight="28" Click="ClearHistoryButton_Click"/>
-                                </StackPanel>
-                                <TextBlock Text="Snabbval" FontWeight="SemiBold" Margin="3,8,3,5"/>
-                                <UniformGrid Columns="3">
-                                    <Button Content="Renskriv" Tag="Cleanup" Padding="7" FontSize="12"
-                                            Click="AssistantActionButton_Click"/>
-                                    <Button Content="Förbättra" Tag="Improve" Padding="7" FontSize="12"
-                                            Click="AssistantActionButton_Click"/>
-                                    <Button Content="Sammanfatta" Tag="Summarize" Padding="7" FontSize="12"
-                                            Click="AssistantActionButton_Click"/>
-                                </UniformGrid>
-                                <Expander Header="Fler åtgärder" Margin="3,6">
+                                <TextBlock Text="Vad vill du göra?" FontWeight="SemiBold"
+                                           FontSize="16" Margin="3,0,3,5"/>
+                                <Button x:Name="CleanupAssistantButton" Tag="Cleanup" Padding="10,8"
+                                        HorizontalContentAlignment="Left"
+                                        Click="AssistantActionButton_Click">
+                                    <StackPanel>
+                                        <TextBlock Text="Renskriv" FontWeight="SemiBold"/>
+                                        <TextBlock Text="Rätta språket och ta bort utfyllnad"
+                                                   Foreground="{StaticResource SecondaryTextBrush}"
+                                                   FontSize="12"/>
+                                    </StackPanel>
+                                </Button>
+                                <Button Tag="Improve" Padding="10,8" HorizontalContentAlignment="Left"
+                                        Click="AssistantActionButton_Click">
+                                    <StackPanel>
+                                        <TextBlock Text="Förbättra" FontWeight="SemiBold"/>
+                                        <TextBlock Text="Gör texten tydligare och mer lättläst"
+                                                   Foreground="{StaticResource SecondaryTextBrush}"
+                                                   FontSize="12"/>
+                                    </StackPanel>
+                                </Button>
+                                <Button Tag="Summarize" Padding="10,8" HorizontalContentAlignment="Left"
+                                        Click="AssistantActionButton_Click">
+                                    <StackPanel>
+                                        <TextBlock Text="Sammanfatta" FontWeight="SemiBold"/>
+                                        <TextBlock Text="Korta ned och behåll det viktigaste"
+                                                   Foreground="{StaticResource SecondaryTextBrush}"
+                                                   FontSize="12"/>
+                                    </StackPanel>
+                                </Button>
+                                <Expander Header="Fler färdiga val" Margin="3,6">
                                     <StackPanel>
                                         <Button Content="Strukturera" Tag="Structure"
                                                 Click="AssistantActionButton_Click"/>
@@ -259,38 +262,63 @@
                                                 Click="AssistantActionButton_Click"/>
                                     </StackPanel>
                                 </Expander>
-                                <TextBlock Text="Egen instruktion" FontWeight="SemiBold" Margin="3,14,3,5"/>
+                                <Border BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,1,0,0"
+                                        Margin="3,10,3,12"/>
+                                <TextBlock Text="Beskriv vad du vill ändra" FontWeight="SemiBold"
+                                           FontSize="16" Margin="3,0,3,5"/>
                                 <Grid>
                                     <TextBox x:Name="CustomInstruction" AcceptsReturn="True" Height="90"
                                              TextWrapping="Wrap" TextChanged="CustomInstruction_TextChanged"
-                                             AutomationProperties.Name="Egen instruktion till textassistenten"
+                                             AutomationProperties.Name="Egen instruktion för textbearbetning"
                                              ToolTip="Skriv vad du vill ändra, till exempel: Gör texten tydligare och dela upp den i rubriker."/>
                                     <TextBlock x:Name="CustomInstructionHint"
                                                Text="Exempel: Gör texten tydligare och dela upp den i rubriker."
                                                Foreground="#8290A3" TextWrapping="Wrap" Margin="14,10"
                                                VerticalAlignment="Top" IsHitTestVisible="False"/>
                                 </Grid>
-                                <Button Content="Kör instruktionen" Tag="Custom" Style="{StaticResource PrimaryButton}"
+                                <Button x:Name="CustomAssistantButton" Content="Bearbeta hela dokumentet"
+                                        Tag="Custom" Style="{StaticResource PrimaryButton}"
                                         Click="AssistantActionButton_Click"/>
+                                <Expander x:Name="AssistantHistorySection" Header="Tidigare förslag"
+                                          Visibility="Collapsed" IsExpanded="False" Margin="3,12,3,0">
+                                    <StackPanel>
+                                        <ListBox x:Name="AssistantHistoryList" Height="105" Margin="0,5"
+                                                BorderBrush="{StaticResource BorderBrush}">
+                                            <ListBox.ItemTemplate>
+                                               <DataTemplate>
+                                                   <StackPanel Margin="5">
+                                                       <TextBlock Text="{Binding Action}" FontWeight="SemiBold"/>
+                                                       <TextBlock Text="{Binding Result}" TextTrimming="CharacterEllipsis"
+                                                                  Foreground="#667085"/>
+                                                   </StackPanel>
+                                               </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
+                                        <Button Content="Rensa historik" HorizontalAlignment="Right" Padding="8,4"
+                                               MinHeight="28" Click="ClearHistoryButton_Click"/>
+                                    </StackPanel>
+                                </Expander>
                             </StackPanel>
                             <Border x:Name="PreviewPanel" Visibility="Collapsed" Background="{StaticResource SubtleBrush}"
                                     CornerRadius="6" Padding="10" Margin="0,14,0,0">
                                 <StackPanel>
-                                    <Grid>
-                                        <TextBlock Text="Granska förslaget" FontWeight="SemiBold" FontSize="16"
-                                                   VerticalAlignment="Center"/>
-                                        <Button Content="&#xE711;" Style="{StaticResource IconButton}"
-                                                HorizontalAlignment="Right" ToolTip="Stäng förslag"
-                                                AutomationProperties.Name="Stäng förslag"
-                                                Click="CancelAssistantButton_Click"/>
-                                    </Grid>
+                                    <TextBlock Text="Granska resultatet" FontWeight="SemiBold" FontSize="16"/>
+                                    <TextBlock Text="Inget ändras förrän du väljer att använda resultatet."
+                                              Foreground="{StaticResource SecondaryTextBrush}"
+                                              TextWrapping="Wrap" Margin="0,3,0,0"/>
                                     <TextBox x:Name="AssistantPreviewBox" IsReadOnly="True" AcceptsReturn="True"
-                                             TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"
-                                             Height="220" Margin="0,8"/>
-                                    <Button x:Name="ApplyAssistantButton" Content="Använd i hela dokumentet"
+                                            TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"
+                                            Height="220" Margin="0,8"/>
+                                    <Button x:Name="ApplyAssistantButton" Content="Ersätt hela dokumentet"
                                             Style="{StaticResource PrimaryButton}" Click="ApplyAssistantButton_Click"/>
-                                    <Button Content="Infoga vid markören" Click="InsertAssistantButton_Click"/>
-                                    <Button Content="Kopiera" Click="CopyAssistantButton_Click"/>
+                                    <Button Content="Avbryt" Click="CancelAssistantButton_Click"/>
+                                    <Expander Header="Fler alternativ" Margin="3,6">
+                                        <StackPanel>
+                                            <Button Content="Infoga vid markören" Click="InsertAssistantButton_Click"/>
+                                            <Button Content="Kopiera till Windows urklipp"
+                                                   Click="CopyAssistantButton_Click"/>
+                                        </StackPanel>
+                                    </Expander>
                                 </StackPanel>
                             </Border>
                         </StackPanel>

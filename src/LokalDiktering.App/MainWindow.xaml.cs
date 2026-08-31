@@ -331,9 +331,15 @@ public partial class MainWindow : Window
 
     private void Editor_SelectionChanged(object sender, RoutedEventArgs e)
     {
-        AssistantScope.Text = Editor.Selection.IsEmpty ? "Hela dokumentet" : "Markerad text";
+        var hasSelection = !Editor.Selection.IsEmpty;
+        AssistantScope.Text = hasSelection
+            ? "Bearbetar: markerad text"
+            : "Bearbetar: hela dokumentet";
+        CustomAssistantButton.Content = hasSelection
+            ? "Bearbeta markerad text"
+            : "Bearbeta hela dokumentet";
         SelectionAssistantBar.Visibility =
-            !Editor.Selection.IsEmpty && AssistantPanel.Visibility != Visibility.Visible
+            hasSelection && AssistantPanel.Visibility != Visibility.Visible
                 ? Visibility.Visible
                 : Visibility.Collapsed;
     }
@@ -342,7 +348,7 @@ public partial class MainWindow : Window
     {
         SelectionAssistantBar.Visibility = Visibility.Collapsed;
         AssistantPanel.Visibility = Visibility.Visible;
-        CustomInstruction.Focus();
+        CleanupAssistantButton.Focus();
     }
 
     private void CloseAssistantPanelButton_Click(object sender, RoutedEventArgs e)
@@ -447,7 +453,7 @@ public partial class MainWindow : Window
             : new TextRange(Editor.Document.ContentStart, Editor.Document.ContentEnd).Text.TrimEnd();
         if (string.IsNullOrWhiteSpace(source))
         {
-            MessageBox.Show("Skriv eller diktera text först.", "Textassistent", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show("Skriv eller diktera text först.", "Bearbeta text", MessageBoxButton.OK, MessageBoxImage.Information);
             return;
         }
 
@@ -472,7 +478,7 @@ public partial class MainWindow : Window
             }
 
             AssistantPreviewBox.Text = result.Text;
-            ApplyAssistantButton.Content = selected ? "Använd på markerad text" : "Använd i hela dokumentet";
+            ApplyAssistantButton.Content = selected ? "Ersätt markerad text" : "Ersätt hela dokumentet";
             AssistantComposerPanel.Visibility = Visibility.Collapsed;
             PreviewPanel.Visibility = Visibility.Visible;
             await assistantHistory.AddAsync(
@@ -556,7 +562,7 @@ public partial class MainWindow : Window
             : $"AI: {AssistantActionLabel(pendingAssistantAction)}";
         await SaveDocumentAsync(viewModel.Current!.Metadata.Id, TitleBox.Text, RichTextContent.Read(Editor), reason);
         CloseAssistantPreview();
-        viewModel.Status = "Textassistentens förslag har tillämpats";
+        viewModel.Status = "Förslaget har tillämpats";
     }
 
     private async void VersionsButton_Click(object sender, RoutedEventArgs e)

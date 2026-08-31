@@ -5,7 +5,7 @@
 3. Klicka **Nytt dokument** eller välj ett dokument till vänster. Dokumentlistan kan döljas med menyikonen högst upp. Allt sparas automatiskt.
 4. Placera markören där texten ska hamna och klicka **Diktera**. Appen använder din sparade mikrofon. Klicka **Starta inspelning**, kontrollera ljudnivån och klicka sedan **Klar – transkribera**.
 5. Vänta medan talet transkriberas lokalt. Du kan avbryta transkriberingen; WAV-filen finns ändå kvar under dokumentmenyn **⋯ → Inspelningar**.
-6. Markera text för att visa snabbvalen **Renskriv**, **Förbättra** och **Sammanfatta**. För hela dokumentet öppnar du **Textassistent**. Läs alltid förslaget innan du använder eller infogar texten.
+6. Markera text och välj **Bearbeta markerad text**, eller öppna **Bearbeta text** för hela dokumentet. Välj sedan exempelvis **Renskriv**, **Förbättra** eller **Sammanfatta**. Läs alltid resultatet innan du ersätter eller infogar texten.
 7. Öppna dokumentmenyn **⋯ → Versioner** för att återställa äldre text. Återställning skapar en ny version och raderar inte historiken.
 8. Verktygsraden har rubrikstil, fet, kursiv, punktlista, ångra och gör om. Vanliga Windows-genvägar för kopiera och klistra in fungerar. **Kopiera allt** finns i dokumentmenyn och lägger både formaterad RTF och vanlig text på Windows urklipp.
 9. Under **Inspelningar** kan du spela upp, transkribera igen eller ta bort en WAV permanent. Åtgärder visas när du väljer en inspelning.
