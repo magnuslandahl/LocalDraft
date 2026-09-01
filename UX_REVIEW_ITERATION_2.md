@@ -1,5 +1,12 @@
 # UX-review – iteration 2
 
+> Historiskt dokument från 2026-08-26. Den senare inspelade reviewn ändrade
+> bland annat dikteringsstart, dokumentmenyer, mikrofonstatus och terminologin
+> **Bearbeta text**. Se
+> [`docs/reviews/2026-08-31-recorded-ux-review.md`](docs/reviews/2026-08-31-recorded-ux-review.md)
+> för aktuell rationale och [`docs/PROJECT_OVERVIEW.md`](docs/PROJECT_OVERVIEW.md)
+> för nuvarande beteende.
+
 Datum: 2026-08-26
 
 Reviewn genomfördes efter den första UX-implementationen genom att köra appen,
