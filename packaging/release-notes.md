@@ -30,5 +30,5 @@ certifikat, inte för att något är fel med filen.
 Språkmodellerna ingår i nedladdningen. Dokument, ljud, transkriberingar och AI-resultat
 stannar på din dator, appen har inga nätverksfunktioner och fungerar helt utan internet.
 
-Läs mer i [ANVANDARGUIDE.md](https://github.com/magnuslandahlapollo/LocalDraft/blob/main/ANVANDARGUIDE.md)
-och [PRIVACY.md](https://github.com/magnuslandahlapollo/LocalDraft/blob/main/PRIVACY.md).
+Läs mer i [ANVANDARGUIDE.md](https://github.com/magnuslandahl/LocalDraft/blob/main/ANVANDARGUIDE.md)
+och [PRIVACY.md](https://github.com/magnuslandahl/LocalDraft/blob/main/PRIVACY.md).

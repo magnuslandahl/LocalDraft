@@ -11,7 +11,7 @@
 
 #define AppName "LocalDraft"
 #define AppPublisher "LocalDraft"
-#define AppUrl "https://github.com/magnuslandahlapollo/LocalDraft"
+#define AppUrl "https://github.com/magnuslandahl/LocalDraft"
 
 #ifndef AppVersion
   #define AppVersion "0.0.0"

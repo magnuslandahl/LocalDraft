@@ -2,8 +2,8 @@
 
 **Skriv och diktera på svenska – helt lokalt på din egen dator.**
 
-[![CI](https://github.com/magnuslandahlapollo/LocalDraft/actions/workflows/ci.yml/badge.svg)](https://github.com/magnuslandahlapollo/LocalDraft/actions/workflows/ci.yml)
-[![Bundle and release](https://github.com/magnuslandahlapollo/LocalDraft/actions/workflows/release.yml/badge.svg)](https://github.com/magnuslandahlapollo/LocalDraft/actions/workflows/release.yml)
+[![CI](https://github.com/magnuslandahl/LocalDraft/actions/workflows/ci.yml/badge.svg)](https://github.com/magnuslandahl/LocalDraft/actions/workflows/ci.yml)
+[![Bundle and release](https://github.com/magnuslandahl/LocalDraft/actions/workflows/release.yml/badge.svg)](https://github.com/magnuslandahl/LocalDraft/actions/workflows/release.yml)
 
 LocalDraft är ett skrivprogram för Windows där du kan skriva text, diktera med mikrofonen
 och låta en lokal AI-modell renskriva, förbättra eller sammanfatta det du skrivit.
@@ -16,7 +16,7 @@ språkmodellen följer med i nedladdningen.
 
 ## Ladda ner
 
-**[Hämta senaste versionen](https://github.com/magnuslandahlapollo/LocalDraft/releases/latest)**
+**[Hämta senaste versionen](https://github.com/magnuslandahl/LocalDraft/releases/latest)**
 
 | Fil | Välj den här om du … |
 | --- | --- |
