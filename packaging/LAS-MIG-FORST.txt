@@ -1,0 +1,27 @@
+LocalDraft - kom igang pa en minut
+==================================
+
+1. Packa upp HELA den har mappen till en vanlig lokal mapp dar du far spara,
+   till exempel C:\LocalDraft.
+   Undvik OneDrive, Dropbox, Google Drive och natverksmappar.
+
+2. Starta LocalDraft.exe.
+
+3. Om Windows visar "Windows skyddade din dator": klicka "Mer information"
+   och sedan "Kor anda". Meddelandet visas for att appen annu inte ar
+   signerad med ett kommersiellt certifikat.
+
+4. Tillat mikrofonen om Windows fragar. Den behovs bara nar du dikterar.
+
+
+Bra att veta
+------------
+
+- Allt sker lokalt. Text, ljud och inspelningar lamnar aldrig datorn och
+  appen fungerar utan internet.
+- Alla dina dokument sparas i undermappen Data bredvid LocalDraft.exe.
+  Vill du flytta eller sakerhetskopiera allt: kopiera hela appmappen.
+- Vill du ta bort appen helt: radera hela appmappen.
+
+Anvandarguide: ANVANDARGUIDE.md
+Integritet: PRIVACY.md

@@ -42,6 +42,12 @@ review documents.
   - `LocalDraft.App`: WPF windows, view model, workflow coordination.
 - All mutable runtime state is below `AppContext.BaseDirectory\Data`.
 - Models and native files are required locally but ignored by Git.
+- Supported target: Windows 10/11 x64 only, because the UI is WPF. Windows on
+  ARM runs the same x64 build through emulation. There is no macOS or Linux
+  build, and adding one would require replacing the WPF layer.
+- Continuous integration lives in `.github/workflows/`: `ci.yml` builds and
+  tests every pull request, and `release.yml` builds the full downloadable
+  bundle and publishes GitHub Releases from `v*` tags.
 
 ## Public repository safety
 
@@ -68,16 +74,17 @@ review documents.
 
 ## Workspace policy
 
-- Work directly on `main` in the repository's existing primary/main worktree
-  by default. Do not create additional Git worktrees or feature branches for
-  normal development, reviews, builds, or releases.
-- Do not create or use pull requests for this project. Commit completed,
-  verified changes directly to `main` and push `main` to the remote unless the
-  user explicitly requests a different workflow.
-- If a managed host has already placed the agent in an isolated worktree and
-  explicitly prohibits access to the primary checkout, remain in the provided
-  worktree. Do not create another worktree or open a pull request; synchronize
-  with `origin/main` and integrate directly into `main` when host rules permit.
+- `main` is protected. Direct pushes to `main` are rejected by the remote.
+- Every change lands through a pull request from a short-lived branch in this
+  repository, with green CI. Rebase or merge `main` into the branch instead of
+  force-pushing over someone else's work.
+- Required checks are **Build and test** and **Repository guards** from
+  `.github/workflows/ci.yml`. Do not merge a pull request while they are red,
+  and do not weaken or skip a check to make a build pass.
+- Keep pull requests focused and reviewable, and fill in the pull request
+  template, including the public-repository safety checklist.
+- Releases are published by tagging `main` with `v<major>.<minor>.<patch>`,
+  which runs `.github/workflows/release.yml`.
 
 ## Change map
 

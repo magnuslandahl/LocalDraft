@@ -1,0 +1,65 @@
+name: CI
+
+# Fast pull-request gate. Models and native binaries are never committed, so the
+# model-dependent integration tests skip themselves here. The full bundle,
+# including models, is validated by the "Bundle and release" workflow.
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: pwsh
+
+jobs:
+  build-and-test:
+    name: Build and test
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up the pinned .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: Restore with locked dependencies
+        run: dotnet restore .\LocalDraft.slnx --locked-mode
+
+      - name: Build the solution
+        run: dotnet build .\LocalDraft.slnx -c Release --no-restore
+
+      - name: Run the full test suite
+        run: dotnet test .\LocalDraft.slnx -c Release --no-build --logger "trx;LogFileName=LocalDraft.trx" --results-directory artifacts\test-results
+
+      - name: Upload test results
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: artifacts/test-results
+          retention-days: 7
+
+  guards:
+    name: Repository guards
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Verify naming, hygiene, privacy boundary and public-repo safety
+        run: .\tools\verify-repository.ps1
