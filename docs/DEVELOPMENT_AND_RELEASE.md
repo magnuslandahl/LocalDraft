@@ -132,6 +132,59 @@ and native runtime compatibility.
 For privacy, storage, model, native-process, or packaging changes, run the
 privacy regression tests and package verification against the produced folder.
 
+## Continuous integration
+
+Two workflows run on GitHub Actions, both on `windows-latest`.
+
+| Workflow | Trigger | Purpose |
+| --- | --- | --- |
+| `.github/workflows/ci.yml` | pull requests and pushes to `main` | Locked restore, Release build, full test suite, repository guards |
+| `.github/workflows/release.yml` | pushes to `main`, `v*` tags, packaging pull requests, manual | Downloads and verifies models, builds the portable bundle and installer, publishes releases |
+
+`main` is protected, so all changes arrive through pull requests. The required
+checks are **Build and test** and **Repository guards**.
+
+`tools\verify-repository.ps1` is the guard script. It fails when tracked files
+use the retired product name, contain build output, models or binaries, contain
+credential-shaped values or machine-specific paths, or when a runtime project
+references networking or telemetry APIs. Run it locally before pushing.
+
+CI does not commit models, so the model-dependent integration tests skip
+themselves in `ci.yml`. Run them with real assets before tagging a release,
+either locally or through the `release.yml` manual run with
+**Also run the slow model-dependent integration tests** enabled.
+
+## Publishing a release
+
+1. Merge the release-ready pull requests into `main` and let both workflows pass.
+2. Run the model-dependent tests with real assets and complete the manual smoke
+   test below.
+3. Tag `main` and push the tag:
+
+   ```powershell
+   git tag v1.0.0
+   git push origin v1.0.0
+   ```
+
+4. `release.yml` then builds the bundle, verifies the package, builds the
+   installer, writes `SHA256SUMS.txt` and publishes a GitHub Release containing:
+
+   ```text
+   LocalDraft-1.0.0-setup-win-x64.exe
+   LocalDraft-1.0.0-portable-win-x64.zip
+   SHA256SUMS.txt
+   LAS-MIG-FORST.txt
+   ```
+
+Release notes for end users come from `packaging\release-notes.md`.
+
+The installer is built from `packaging\LocalDraft.iss` by
+`tools\build-installer.ps1`. It is a per-user installer that never requests
+administrator rights and installs below `{autopf}`, which resolves to the user's
+local `Programs` folder. That keeps the application root writable, which the
+storage model requires. Do not change it into a machine-wide installer that
+writes to `Program Files`, because the app would then fail to start.
+
 ## Manual release smoke test
 
 From a newly extracted ZIP in a normal writable folder:
@@ -155,11 +208,14 @@ From a newly extracted ZIP in a normal writable folder:
   or build output to commit.
 - Dependency and model documentation matches the pinned files.
 - Full solution tests pass.
+- `tools\verify-repository.ps1` passes.
 - Portable build and verification succeed.
+- The installer builds and installs into a writable per-user folder.
 - The app starts from the actual packaged folder, not only from Debug output.
 - Privacy claims in `PRIVACY.md`, `README.md`, and UI still agree.
 - `ANVANDARGUIDE.md` matches current Swedish labels and workflows.
-- The produced ZIP is copied or attached from the correct worktree path.
+- The `v*` tag is pushed and the published release contains the installer, the
+  portable ZIP and `SHA256SUMS.txt`.
 
 ## Known build warnings
 
