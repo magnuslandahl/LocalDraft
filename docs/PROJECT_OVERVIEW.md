@@ -18,8 +18,8 @@ temporary files remain below the application directory. The app has no runtime
 network features. This is part of the product definition, not an optional
 deployment mode.
 
-The product name shown to users is **LocalDraft**. The solution, namespaces,
-executable, and some historical documents still use `LokalDiktering`.
+The product, solution, namespaces, executable, and package names use
+**LocalDraft** consistently.
 
 ## Supported environment
 
@@ -32,7 +32,7 @@ executable, and some historical documents still use `LokalDiktering`.
 
 ## Primary user journey
 
-1. Start `LokalDiktering.exe` from a writable extracted folder.
+1. Start `LocalDraft.exe` from a writable extracted folder.
 2. Create or select a document in the left document panel.
 3. Type and format text in the main editor, or select **Diktera**.
 4. Dictation starts immediately with the microphone saved in

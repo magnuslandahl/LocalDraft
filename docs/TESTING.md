@@ -8,9 +8,9 @@ important WPF wiring.
 
 | Project | Tests | Focus |
 | --- | ---: | --- |
-| `LokalDiktering.Core.Tests` | 5 | Hashing, chunking, prompt isolation, protected values |
-| `LokalDiktering.Infrastructure.Tests` | 12 | Containment, storage, recovery, audio/model integration, privacy regression |
-| `LokalDiktering.App.Tests` | 10 | XAML/source wiring and UX regressions |
+| `LocalDraft.Core.Tests` | 5 | Hashing, chunking, prompt isolation, protected values |
+| `LocalDraft.Infrastructure.Tests` | 12 | Containment, storage, recovery, audio/model integration, privacy regression |
+| `LocalDraft.App.Tests` | 10 | XAML/source wiring and UX regressions |
 | **Total** | **27** | |
 
 ## Commands
@@ -18,21 +18,21 @@ important WPF wiring.
 Target one project while iterating:
 
 ```powershell
-dotnet test .\tests\LokalDiktering.Core.Tests\LokalDiktering.Core.Tests.csproj
-dotnet test .\tests\LokalDiktering.Infrastructure.Tests\LokalDiktering.Infrastructure.Tests.csproj
-dotnet test .\tests\LokalDiktering.App.Tests\LokalDiktering.App.Tests.csproj
+dotnet test .\tests\LocalDraft.Core.Tests\LocalDraft.Core.Tests.csproj
+dotnet test .\tests\LocalDraft.Infrastructure.Tests\LocalDraft.Infrastructure.Tests.csproj
+dotnet test .\tests\LocalDraft.App.Tests\LocalDraft.App.Tests.csproj
 ```
 
 Full baseline:
 
 ```powershell
-dotnet test .\LokalDiktering.slnx
+dotnet test .\LocalDraft.slnx
 ```
 
 Release configuration:
 
 ```powershell
-dotnet test .\LokalDiktering.slnx -c Release
+dotnet test .\LocalDraft.slnx -c Release
 ```
 
 ## Core coverage

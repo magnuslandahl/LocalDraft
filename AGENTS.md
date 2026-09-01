@@ -31,17 +31,40 @@ review documents.
 ## Project facts
 
 - User-facing product name: **LocalDraft**.
-- Source/assembly name: `LokalDiktering`.
+- Source/assembly name: `LocalDraft`.
 - Platform: .NET 10 WPF on Windows x64.
 - Distribution: self-contained, portable, non-single-file, untrimmed.
 - Runtime AI: bundled Whisper CLI and Qwen through LLamaSharp, both CPU-only.
 - Main projects:
-  - `LokalDiktering.Core`: models, contracts, prompt/text safety.
-  - `LokalDiktering.Infrastructure`: storage, audio, AI, recovery, settings,
+  - `LocalDraft.Core`: models, contracts, prompt/text safety.
+  - `LocalDraft.Infrastructure`: storage, audio, AI, recovery, settings,
     logs.
-  - `LokalDiktering.App`: WPF windows, view model, workflow coordination.
+  - `LocalDraft.App`: WPF windows, view model, workflow coordination.
 - All mutable runtime state is below `AppContext.BaseDirectory\Data`.
 - Models and native files are required locally but ignored by Git.
+
+## Public repository safety
+
+- This is a public repository. Treat every committed file and all Git metadata as
+  publicly visible.
+- Before every commit, inspect `git status --short`, the staged file list, and
+  the complete staged diff for secrets or sensitive information. Check for API
+  keys, tokens, passwords, private keys, connection strings, internal URLs,
+  personal data, user content, machine-specific paths, and accidentally staged
+  ignored or generated files.
+- Before committing, also verify that the author and committer names and email
+  addresses are appropriate for permanent public attribution. Use a GitHub
+  noreply address instead of a private or corporate email address.
+- Never commit a real secret, even in examples, tests, documentation, fixtures,
+  generated output, or Git configuration. Use unmistakably fake placeholders
+  where examples require credential-shaped values.
+- If sensitive information is found, stop the commit, remove it from the change
+  and repository history as appropriate, and tell the user that exposed
+  credentials must be revoked or rotated. Do not repeat the sensitive value in
+  logs, commit messages, review comments, or chat.
+- Push only explicitly reviewed branches and tags to a public remote. Never use
+  `git push --all` or `git push --mirror`; local-only refs may contain private
+  workspace or checkpoint history that is not intended for publication.
 
 ## Workspace policy
 

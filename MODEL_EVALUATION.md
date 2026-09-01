@@ -32,4 +32,4 @@ Mätt 26 augusti 2026 på Windows 11 Enterprise 10.0.26200, AMD Ryzen AI 9 HX PR
 | Textmodell peak working set | 2 884 689 920 byte |
 | Skyddade tokens i referensfallet | Alla bevarade |
 
-Mätningen är reproducerbar med `dotnet run --project tools/LokalDiktering.Benchmark -c Release -- .` och råresultatet skrivs till `artifacts/benchmark-results.json`. Resultaten gäller endast testmaskinen; en 8 GB-laptop förväntas vara långsammare.
+Mätningen är reproducerbar med `dotnet run --project tools/LocalDraft.Benchmark -c Release -- .` och råresultatet skrivs till `artifacts/benchmark-results.json`. Resultaten gäller endast testmaskinen; en 8 GB-laptop förväntas vara långsammare.

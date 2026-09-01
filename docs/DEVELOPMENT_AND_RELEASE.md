@@ -39,9 +39,9 @@ selection evidence.
 ## Restore, build, and run
 
 ```powershell
-dotnet restore .\LokalDiktering.slnx --locked-mode
-dotnet build .\LokalDiktering.slnx
-dotnet run --project .\src\LokalDiktering.App\LokalDiktering.App.csproj
+dotnet restore .\LocalDraft.slnx --locked-mode
+dotnet build .\LocalDraft.slnx
+dotnet run --project .\src\LocalDraft.App\LocalDraft.App.csproj
 ```
 
 Package lock files are committed and `RestorePackagesWithLockFile` is enabled.
@@ -56,7 +56,7 @@ Runtime data created by a development run lives below that build output, for
 example:
 
 ```text
-src\LokalDiktering.App\bin\Debug\net10.0-windows\Data\
+src\LocalDraft.App\bin\Debug\net10.0-windows\Data\
 ```
 
 Do not mistake generated `Data` for source data or commit it.
@@ -66,15 +66,15 @@ Do not mistake generated `Data` for source data or commit it.
 Run the smallest relevant test project while iterating:
 
 ```powershell
-dotnet test .\tests\LokalDiktering.Core.Tests\LokalDiktering.Core.Tests.csproj
-dotnet test .\tests\LokalDiktering.Infrastructure.Tests\LokalDiktering.Infrastructure.Tests.csproj
-dotnet test .\tests\LokalDiktering.App.Tests\LokalDiktering.App.Tests.csproj
+dotnet test .\tests\LocalDraft.Core.Tests\LocalDraft.Core.Tests.csproj
+dotnet test .\tests\LocalDraft.Infrastructure.Tests\LocalDraft.Infrastructure.Tests.csproj
+dotnet test .\tests\LocalDraft.App.Tests\LocalDraft.App.Tests.csproj
 ```
 
 Run the solution before a release or broad UI completion:
 
 ```powershell
-dotnet test .\LokalDiktering.slnx
+dotnet test .\LocalDraft.slnx
 ```
 
 The current baseline is 27 tests: 5 Core, 12 Infrastructure, and 10 App.
@@ -101,8 +101,8 @@ The script:
 Outputs:
 
 ```text
-dist\LokalDiktering-Portable-win-x64\
-LokalDiktering-Portable-win-x64.zip
+dist\LocalDraft-Portable-win-x64\
+LocalDraft-Portable-win-x64.zip
 ```
 
 The ZIP is created in the repository/worktree where the script is run. Do not
@@ -136,7 +136,7 @@ privacy regression tests and package verification against the produced folder.
 
 From a newly extracted ZIP in a normal writable folder:
 
-1. Start `LokalDiktering.exe`.
+1. Start `LocalDraft.exe`.
 2. Confirm the first-run/local-storage explanation.
 3. Create and switch among at least three documents, including selecting the
    first item.

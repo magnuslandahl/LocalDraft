@@ -1,7 +1,7 @@
 # Användarguide – LocalDraft
 
 1. Packa upp hela appens ZIP-fil till en vanlig lokal mapp där du får spara. Undvik OneDrive, Dropbox, Google Drive och nätverksmappar.
-2. Starta `LokalDiktering.exe`. Om Windows frågar om mikrofonåtkomst behöver du tillåta den.
+2. Starta `LocalDraft.exe`. Om Windows frågar om mikrofonåtkomst behöver du tillåta den.
 3. Klicka **Nytt dokument** eller välj ett dokument till vänster. Dölj dokumentlistan med vänsterpilen i panelen och öppna den igen via fliken **Dokument**. I mindre fönster öppnas listan ovanpå redigeraren. Allt sparas automatiskt.
 4. Placera markören där texten ska hamna och klicka **Diktera**. Inspelningen startar direkt med mikrofonen som visas bredvid knappen. Kontrollera ljudnivån och klicka sedan **Klar – transkribera**.
 5. Vänta medan talet transkriberas lokalt. Du kan avbryta transkriberingen; WAV-filen finns ändå kvar under dokumentmenyn **⋯ → Inspelningar**.

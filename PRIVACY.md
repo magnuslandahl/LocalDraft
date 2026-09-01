@@ -4,7 +4,7 @@ LocalDraft är utformad för lokal behandling utan nätverk. Runtime-projekten i
 
 ## Lagring
 
-`AppRoot` är mappen som innehåller `LokalDiktering.exe`. Alla avsiktliga appskrivningar görs under:
+`AppRoot` är mappen som innehåller `LocalDraft.exe`. Alla avsiktliga appskrivningar görs under:
 
 - `Data/Documents` – dokument, RTF, text, versioner och WAV
 - `Data/Settings` – lokala inställningar

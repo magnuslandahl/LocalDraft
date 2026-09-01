@@ -8,12 +8,12 @@ This is the detailed code and runtime map for LocalDraft. Read
 
 | Project | Responsibility |
 | --- | --- |
-| `src/LokalDiktering.Core` | Domain records, service contracts, hashing, text chunking, prompt construction, protected-token checks |
-| `src/LokalDiktering.Infrastructure` | Contained paths, atomic storage, audio, transcription, local AI, recovery, settings, history, logs |
-| `src/LokalDiktering.App` | WPF composition, dependency injection, windows, view model, editor integration, user workflows |
-| `tests/LokalDiktering.Core.Tests` | Deterministic text-processing tests |
-| `tests/LokalDiktering.Infrastructure.Tests` | Storage, privacy, audio, assistant-corpus, and model-manifest tests |
-| `tests/LokalDiktering.App.Tests` | XAML and source-level UI regression tests |
+| `src/LocalDraft.Core` | Domain records, service contracts, hashing, text chunking, prompt construction, protected-token checks |
+| `src/LocalDraft.Infrastructure` | Contained paths, atomic storage, audio, transcription, local AI, recovery, settings, history, logs |
+| `src/LocalDraft.App` | WPF composition, dependency injection, windows, view model, editor integration, user workflows |
+| `tests/LocalDraft.Core.Tests` | Deterministic text-processing tests |
+| `tests/LocalDraft.Infrastructure.Tests` | Storage, privacy, audio, assistant-corpus, and model-manifest tests |
+| `tests/LocalDraft.App.Tests` | XAML and source-level UI regression tests |
 
 The architecture intentionally uses a small number of explicit services rather
 than a framework-heavy MVVM layer. `MainWindowViewModel` manages document list,
@@ -23,7 +23,7 @@ workflows.
 
 ## Startup and shutdown
 
-`src/LokalDiktering.App/App.xaml.cs` is the composition root.
+`src/LocalDraft.App/App.xaml.cs` is the composition root.
 
 Startup order is security-sensitive:
 
@@ -48,7 +48,7 @@ model and disposes the service provider.
 
 ## Dependency-injection map
 
-The principal contracts are in `src/LokalDiktering.Core/Contracts.cs`.
+The principal contracts are in `src/LocalDraft.Core/Contracts.cs`.
 
 | Contract | Implementation |
 | --- | --- |
@@ -72,7 +72,7 @@ All mutable runtime paths are descendants of `AppContext.BaseDirectory`.
 
 ```text
 AppRoot/
-  LokalDiktering.exe
+  LocalDraft.exe
   Models/
     manifest.json
     Whisper/ggml-small-q5_1.bin
@@ -131,7 +131,7 @@ assistant history are removed together.
 
 ## Domain and persisted models
 
-The main records are in `src/LokalDiktering.Core/Models.cs`.
+The main records are in `src/LocalDraft.Core/Models.cs`.
 
 | Type | Purpose |
 | --- | --- |

@@ -6,8 +6,8 @@ param(
 
 $ErrorActionPreference = 'Stop'
 $root = (Resolve-Path $RepositoryRoot).Path
-$publish = Join-Path $root 'dist\LokalDiktering-Portable-win-x64'
-$zip = Join-Path $root 'LokalDiktering-Portable-win-x64.zip'
+$publish = Join-Path $root 'dist\LocalDraft-Portable-win-x64'
+$zip = Join-Path $root 'LocalDraft-Portable-win-x64.zip'
 
 if (-not (Test-Path (Join-Path $root 'Models\Whisper\ggml-small-q5_1.bin')) -or
     -not (Test-Path (Join-Path $root 'Models\Text\Qwen3-1.7B-Q4_K_M.gguf')) -or
@@ -15,19 +15,19 @@ if (-not (Test-Path (Join-Path $root 'Models\Whisper\ggml-small-q5_1.bin')) -or
     throw 'Modeller eller whisper.cpp saknas. Kor tools\fetch-models.ps1 forst.'
 }
 
-dotnet restore (Join-Path $root 'LokalDiktering.slnx') --locked-mode
+dotnet restore (Join-Path $root 'LocalDraft.slnx') --locked-mode
 if ($LASTEXITCODE -ne 0) { throw 'dotnet restore misslyckades.' }
-dotnet build (Join-Path $root 'LokalDiktering.slnx') -c Release --no-restore
+dotnet build (Join-Path $root 'LocalDraft.slnx') -c Release --no-restore
 if ($LASTEXITCODE -ne 0) { throw 'dotnet build misslyckades.' }
 if (-not $SkipTests) {
-    dotnet test (Join-Path $root 'LokalDiktering.slnx') -c Release --no-build
+    dotnet test (Join-Path $root 'LocalDraft.slnx') -c Release --no-build
     if ($LASTEXITCODE -ne 0) { throw 'dotnet test misslyckades.' }
 }
 
 if (Test-Path $publish) {
     Remove-Item -Recurse -Force $publish
 }
-dotnet publish (Join-Path $root 'src\LokalDiktering.App\LokalDiktering.App.csproj') `
+dotnet publish (Join-Path $root 'src\LocalDraft.App\LocalDraft.App.csproj') `
     -c Release -r win-x64 --self-contained true --no-build -o $publish
 if ($LASTEXITCODE -ne 0) { throw 'dotnet publish misslyckades.' }
 

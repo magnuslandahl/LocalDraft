@@ -24,11 +24,11 @@ Krav:
 - PowerShell 7
 
 ```powershell
-dotnet restore .\LokalDiktering.slnx --locked-mode
-dotnet build .\LokalDiktering.slnx
-dotnet test .\LokalDiktering.slnx
+dotnet restore .\LocalDraft.slnx --locked-mode
+dotnet build .\LocalDraft.slnx
+dotnet test .\LocalDraft.slnx
 .\tools\fetch-models.ps1
-dotnet run --project .\src\LokalDiktering.App
+dotnet run --project .\src\LocalDraft.App
 ```
 
 `fetch-models.ps1` är endast för utvecklare. Den hämtar fastnaglade filer och avbryter vid fel SHA-256. Appen hämtar aldrig modeller.
@@ -40,13 +40,13 @@ dotnet run --project .\src\LokalDiktering.App
 .\tools\build-portable.ps1
 ```
 
-Resultatet blir `LokalDiktering-Portable-win-x64.zip`. Paketet är self-contained, folder-baserat, `win-x64`, otrimmat och inte single-file. Slutanvändaren packar upp hela ZIP-filen till en lokal skrivbar mapp och startar `LokalDiktering.exe`.
+Resultatet blir `LocalDraft-Portable-win-x64.zip`. Paketet är self-contained, folder-baserat, `win-x64`, otrimmat och inte single-file. Slutanvändaren packar upp hela ZIP-filen till en lokal skrivbar mapp och startar `LocalDraft.exe`.
 
 ## Projekt
 
-- `src/LokalDiktering.Core`: domänmodeller, kontrakt, prompt- och textsäkerhet
-- `src/LokalDiktering.Infrastructure`: lagring, audio, Whisper, LLamaSharp och lokal loggning
-- `src/LokalDiktering.App`: WPF-gränssnitt
+- `src/LocalDraft.Core`: domänmodeller, kontrakt, prompt- och textsäkerhet
+- `src/LocalDraft.Infrastructure`: lagring, audio, Whisper, LLamaSharp och lokal loggning
+- `src/LocalDraft.App`: WPF-gränssnitt
 - `tests`: enhets-, lagrings-, integritets- och projektkontroller
 - `tools`: modellhämtning, publicering och paketverifiering
 - `docs`: detaljerad produkt-, implementations-, test- och releasekunskap

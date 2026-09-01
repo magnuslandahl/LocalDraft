@@ -1,0 +1,15 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/LocalDraft.App/LocalDraft.App.csproj" />
+    <Project Path="src/LocalDraft.Core/LocalDraft.Core.csproj" />
+    <Project Path="src/LocalDraft.Infrastructure/LocalDraft.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/LocalDraft.App.Tests/LocalDraft.App.Tests.csproj" />
+    <Project Path="tests/LocalDraft.Core.Tests/LocalDraft.Core.Tests.csproj" />
+    <Project Path="tests/LocalDraft.Infrastructure.Tests/LocalDraft.Infrastructure.Tests.csproj" />
+  </Folder>
+  <Folder Name="/tools/">
+    <Project Path="tools/LocalDraft.Benchmark/LocalDraft.Benchmark.csproj" />
+  </Folder>
+</Solution>

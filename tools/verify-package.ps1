@@ -6,7 +6,7 @@ param(
 $ErrorActionPreference = 'Stop'
 $root = (Resolve-Path $PackageRoot).Path
 $required = @(
-    'LokalDiktering.exe',
+    'LocalDraft.exe',
     'Models\manifest.json',
     'Models\Whisper\ggml-small-q5_1.bin',
     'Models\Text\Qwen3-1.7B-Q4_K_M.gguf',
@@ -36,7 +36,7 @@ foreach ($model in $manifest.models) {
 }
 
 $forbiddenPackages = 'ApplicationInsights|OpenTelemetry|Sentry|AWSSDK|Google\.Cloud|Azure\.AI\.OpenAI'
-$deps = Get-Content (Join-Path $root 'LokalDiktering.deps.json') -Raw
+$deps = Get-Content (Join-Path $root 'LocalDraft.deps.json') -Raw
 if ($deps -match $forbiddenPackages) {
     throw 'Paketet innehaller ett forbjudet moln- eller telemetribibliotek.'
 }
