@@ -45,14 +45,16 @@ review documents.
 
 ## Workspace policy
 
-- Work in the repository's existing primary/main worktree by default. Do not
-  create additional Git worktrees for normal development, reviews, builds, or
-  releases.
-- Use a normal branch in that primary worktree when isolation from `main` is
-  needed.
+- Work directly on `main` in the repository's existing primary/main worktree
+  by default. Do not create additional Git worktrees or feature branches for
+  normal development, reviews, builds, or releases.
+- Do not create or use pull requests for this project. Commit completed,
+  verified changes directly to `main` and push `main` to the remote unless the
+  user explicitly requests a different workflow.
 - If a managed host has already placed the agent in an isolated worktree and
   explicitly prohibits access to the primary checkout, remain in the provided
-  worktree. Do not create another worktree.
+  worktree. Do not create another worktree or open a pull request; synchronize
+  with `origin/main` and integrate directly into `main` when host rules permit.
 
 ## Change map
 
