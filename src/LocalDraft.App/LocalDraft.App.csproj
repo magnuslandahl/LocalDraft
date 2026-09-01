@@ -32,6 +32,7 @@
              CopyToOutputDirectory="PreserveNewest"
              CopyToPublishDirectory="Never" />
     <Content Include="..\..\Native\Whisper\whisper-cli.exe"
+             Condition="Exists('..\..\Native\Whisper\whisper-cli.exe')"
              Link="Native\Whisper\whisper-cli.exe"
              CopyToOutputDirectory="PreserveNewest"
              CopyToPublishDirectory="Never" />
