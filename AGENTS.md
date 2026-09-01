@@ -43,6 +43,17 @@ review documents.
 - All mutable runtime state is below `AppContext.BaseDirectory\Data`.
 - Models and native files are required locally but ignored by Git.
 
+## Workspace policy
+
+- Work in the repository's existing primary/main worktree by default. Do not
+  create additional Git worktrees for normal development, reviews, builds, or
+  releases.
+- Use a normal branch in that primary worktree when isolation from `main` is
+  needed.
+- If a managed host has already placed the agent in an isolated worktree and
+  explicitly prohibits access to the primary checkout, remain in the provided
+  worktree. Do not create another worktree.
+
 ## Change map
 
 | Change area | Primary files | Minimum validation |
