@@ -18,6 +18,9 @@ public sealed class ProjectConfigurationTests
         Assert.Contains(@"Include=""..\..\Models\Whisper\*.bin""", project);
         Assert.Contains(@"Include=""..\..\Models\Text\*.gguf""", project);
         Assert.Contains(@"Include=""..\..\Native\Whisper\whisper-cli.exe""", project);
+        // The native helper is never committed, so the build must still succeed
+        // when it is absent, for example on a clean CI checkout.
+        Assert.Contains(@"Condition=""Exists('..\..\Native\Whisper\whisper-cli.exe')""", project);
         Assert.Contains(@"CopyToOutputDirectory=""PreserveNewest""", project);
         Assert.Contains("<ApplicationIcon>Assets\\LocalDraft.ico</ApplicationIcon>", project);
         Assert.True(File.Exists(Path.Combine(
