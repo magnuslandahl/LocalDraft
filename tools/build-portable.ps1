@@ -42,7 +42,7 @@ Copy-Item (Join-Path $root 'Native\Whisper\*.dll') $nativePublish -Force
 Copy-Item (Join-Path $root 'Native\Whisper\whisper-cli.exe') $nativePublish -Force
 Copy-Item (Join-Path $root 'licenses') $publish -Recurse -Force
 @('README.md', 'ANVANDARGUIDE.md', 'PRIVACY.md', 'ARCHITECTURE.md',
-  'MODEL_EVALUATION.md', 'DEPENDENCIES.md', 'THIRD_PARTY_NOTICES.md') |
+  'MODEL_EVALUATION.md', 'DEPENDENCIES.md', 'THIRD_PARTY_NOTICES.md', 'LICENSE') |
     ForEach-Object { Copy-Item (Join-Path $root $_) $publish -Force }
 Copy-Item (Join-Path $root 'packaging\LAS-MIG-FORST.txt') $publish -Force
 
