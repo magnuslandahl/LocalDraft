@@ -135,6 +135,11 @@ What must not change: one single root, everything below it, no scattering across
 the system, no cloud-synced location, no silent fallback, a clear failure when
 the root is not writable, and the existing symlink and reparse-point validation.
 
+This also unlocks Windows packaging options. An MSIX package installs read-only,
+which today's "beside the executable" root forbids; once the root is a
+per-platform decision, the Microsoft Store becomes viable. See
+[`DISTRIBUTION_AND_SIGNING.md`](DISTRIBUTION_AND_SIGNING.md).
+
 This requires an explicit, reviewed amendment to `PRIVACY.md`, `AGENTS.md` and
 `ANVANDARGUIDE.md` before any code lands. Treat it as the most sensitive item in
 the port: the "copy the app folder to move everything" promise becomes
@@ -147,7 +152,8 @@ and how to back it up or delete it.
   Swedish, plus handling the case where the user denies the TCC prompt.
 - **Clipboard.** Avalonia clipboard with the `public.rtf` type on macOS.
 - **App bundle.** `.app` layout, icon set (`.icns`), bundle identifier.
-- **Distribution.** `.dmg` per architecture, signed and notarized. See
+- **Distribution.** `.dmg` per architecture, signed and notarized with the
+  existing Apple Developer account. See
   [`DISTRIBUTION_AND_SIGNING.md`](DISTRIBUTION_AND_SIGNING.md). macOS is stricter
   than Windows here: without notarization Gatekeeper effectively blocks the app.
 - **Tests.** `ProjectConfigurationTests` asserts WPF XAML strings and must be
@@ -190,8 +196,9 @@ so every asset stays below the 2 GB GitHub release limit.
 2. **The storage-root change touches the core privacy promise.** It needs sign-off
    before code, not after.
 3. **Audio quality and latency on macOS** are unproven until the spike.
-4. **Notarization is a hard gate.** It needs a paid Apple account and working CI
-   secrets before macOS can ship at all.
+4. **Notarization is a hard gate.** It needs working CI secrets before macOS can
+   ship at all, and confirmation that the existing Apple Developer identity may
+   be used for this project.
 5. **Transcription performance on Intel Macs** will be the slowest supported
    configuration and should be measured before promising it.
 
