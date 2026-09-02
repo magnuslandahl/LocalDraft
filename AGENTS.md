@@ -15,6 +15,8 @@ Before making a non-trivial change, read the documents that cover that area:
 | [`docs/IMPLEMENTATION_GUIDE.md`](docs/IMPLEMENTATION_GUIDE.md) | Code map, DI, runtime storage tree, document/audio/AI flows, concurrency |
 | [`PRIVACY.md`](PRIVACY.md) | Authoritative privacy and storage claims |
 | [`docs/DEVELOPMENT_AND_RELEASE.md`](docs/DEVELOPMENT_AND_RELEASE.md) | Setup, build, run, portable packaging, release checklist |
+| [`docs/CROSS_PLATFORM_PLAN.md`](docs/CROSS_PLATFORM_PLAN.md) | Proposed macOS port: decisions, phases, and the storage-root change it requires |
+| [`docs/DISTRIBUTION_AND_SIGNING.md`](docs/DISTRIBUTION_AND_SIGNING.md) | Proposed code signing, SmartScreen and Gatekeeper handling |
 | [`docs/TESTING.md`](docs/TESTING.md) | Current 27-test baseline, coverage, test-selection matrix |
 | [`ANVANDARGUIDE.md`](ANVANDARGUIDE.md) | Current Swedish user workflows and labels |
 | [`ARCHITECTURE.md`](ARCHITECTURE.md) | Concise architecture overview |

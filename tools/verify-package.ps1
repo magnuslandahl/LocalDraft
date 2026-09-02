@@ -12,6 +12,7 @@ $required = @(
     'Models\Text\Qwen3-1.7B-Q4_K_M.gguf',
     'Native\Whisper\whisper-cli.exe',
     'LAS-MIG-FORST.txt',
+    'LICENSE',
     'README.md',
     'ANVANDARGUIDE.md',
     'PRIVACY.md',

@@ -170,6 +170,8 @@ innan du committar. Se [AGENTS.md](AGENTS.md) och
 | [docs/PROJECT_OVERVIEW.md](docs/PROJECT_OVERVIEW.md) | Produkt, aktuellt UX, terminologi och avgränsningar |
 | [docs/IMPLEMENTATION_GUIDE.md](docs/IMPLEMENTATION_GUIDE.md) | Kodkarta, DI, lagring, dataflöden och samtidighet |
 | [docs/DEVELOPMENT_AND_RELEASE.md](docs/DEVELOPMENT_AND_RELEASE.md) | Utvecklingsmiljö, CI, paketering och release |
+| [docs/CROSS_PLATFORM_PLAN.md](docs/CROSS_PLATFORM_PLAN.md) | Plan för macOS-stöd (Apple Silicon och Intel) |
+| [docs/DISTRIBUTION_AND_SIGNING.md](docs/DISTRIBUTION_AND_SIGNING.md) | Signering, SmartScreen och Gatekeeper |
 | [docs/TESTING.md](docs/TESTING.md) | Testomfattning, kommandon och val av testnivå |
 | [ARCHITECTURE.md](ARCHITECTURE.md) | Kort arkitekturöversikt |
 | [MODEL_EVALUATION.md](MODEL_EVALUATION.md) | Modellval, mätningar och eval-korpus |
@@ -179,6 +181,9 @@ innan du committar. Se [AGENTS.md](AGENTS.md) och
 
 ## Licens
 
+LocalDrafts egen källkod är licensierad under **Apache License 2.0**, se
+[LICENSE](LICENSE). Du får använda, ändra och distribuera koden, även
+kommersiellt, så länge du behåller licens- och upphovsrättstexten.
+
 Tredjepartskomponenter och modeller har egna licenser, se
 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) och mappen `licenses/`.
-Någon licens för LocalDrafts egen källkod är ännu inte vald.
