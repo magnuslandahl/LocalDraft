@@ -57,7 +57,14 @@ try {
             $_ -match '(?i)\.(bin|gguf|dll|exe|pdb|zip)$'
         })
 
-    # 3. High-confidence credential formats must never be committed.
+    # 3. Signing material and other credentials must live outside the repository.
+    Add-Failure 'Signing material or credential files are tracked by Git:' `
+        @($tracked | Where-Object {
+            $_ -match '(?i)\.(pfx|p12|cer|crt|der|pem|key|jks|keystore|kdbx|p8|mobileprovision|provisionprofile)$' -or
+            $_ -match '(?i)(^|/)(\.env(\..+)?|id_rsa|id_dsa|id_ecdsa|id_ed25519)$'
+        })
+
+    # 4. High-confidence credential formats must never be committed.
     Add-Failure 'Tracked files contain credential-shaped values:' (Find-Matches @(
         'AKIA[0-9A-Z]{16}',
         'ASIA[0-9A-Z]{16}',
@@ -71,14 +78,14 @@ try {
         'InstrumentationKey=[0-9a-fA-F-]{20,}'
     ))
 
-    # 4. Machine-specific paths and private addresses must not leak.
+    # 5. Machine-specific paths and private addresses must not leak.
     Add-Failure 'Tracked files contain machine-specific paths or private addresses:' (Find-Matches @(
         '[A-Za-z]:\\Users\\[^\\/\s"'']+',
         '/home/[a-z0-9_.-]+',
         '[A-Za-z0-9._%+-]+@(gmail|outlook|hotmail|live|apollo)\.[A-Za-z]{2,}'
     ))
 
-    # 5. Runtime projects must stay offline.
+    # 6. Runtime projects must stay offline.
     Add-Failure 'Runtime projects reference networking or telemetry APIs:' (Find-Matches `
         -Patterns @(
             'HttpClient', 'WebClient', 'System\.Net\.Sockets', 'HttpWebRequest',
